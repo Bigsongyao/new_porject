@@ -1,0 +1,40 @@
+<?php
+defined('IN_IA') or exit('Access Denied');
+
+/** 发送预约订单提醒
+ * @param $oid
+ */
+function order_remind($role, $user_id, $content = ''){
+    global $_W;
+
+    if($role == 1){
+        $result = pdo_fetchcolumn('SELECT is_designer FROM '.tablename('jkj_user').' WHERE user_id=:user_id AND uniacid=:uniacid', array(':user_id' => $user_id, ':uniacid' => $_W['uniacid']));
+    }elseif($role == 2){
+        $result = pdo_fetchcolumn('SELECT is_shoper FROM '.tablename('jkj_user').' WHERE user_id=:user_id AND uniacid=:uniacid', array(':user_id' => $user_id, ':uniacid' => $_W['uniacid']));
+    }else{
+        $result = pdo_fetchcolumn('SELECT user_id FROM '.tablename('jkj_user').' WHERE user_id=:user_id AND uniacid=:uniacid', array(':user_id' => $user_id, ':uniacid' => $_W['uniacid']));
+    }
+
+    if(!$result){
+        return false;
+    }
+
+    $data = array(
+        'user_id' => $user_id,
+        'content' => $content,
+        'uniacid' => $_W['uniacid'],
+        'status' => 0,
+        'add_time' => TIMESTAMP,
+        'role' => $role,
+        'uniacid' => $_W['uniacid']
+    );
+
+}
+
+/** 生成新的订单号
+ *
+ */
+function order_sn($shop_id){
+    return date('Ymdhis').mt_rand(1000, 9999);
+}
+?>

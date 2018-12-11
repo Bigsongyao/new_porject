@@ -1,0 +1,6 @@
+2017-10-14 14:02:04 SQL Error :
+------------
+String:
+SQL: <br/>ALTER TABLE `ims_storex_room` CHANGE `hotelid` `store_base_id` INT(11) NULL DEFAULT '0';<hr/>Params: <br/>array (
+)<hr/>SQL Error: <br/>Duplicate column name 'store_base_id'<hr/>Traces: <br/>file: /framework/class/db.class.php; line: 408; <br />file: /framework/class/db.class.php; line: 89; <br />file: /framework/function/pdo.func.php; line: 36; <br />file: /addons/wn_storex/upgrade.php; line: 3; <br />file: /web/source/module/manage-system.ctrl.php; line: 238; <br />file: /web/index.php; line: 101; <br />
+

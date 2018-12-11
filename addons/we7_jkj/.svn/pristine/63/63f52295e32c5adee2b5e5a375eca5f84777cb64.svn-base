@@ -1,0 +1,7 @@
+.tdcenter{vertical-align: middle;text-align: center;}
+.tdleft{vertical-align: middle;text-align: left;}
+.margin5{margin: 5px 0px;}
+
+.form-bordered .form-group{padding-top: 0px!important;}
+.form-bordered .form-group label{padding-right: 10px!important;}
+.form-bordered .form-control-focus{margin-bottom: 15px;}

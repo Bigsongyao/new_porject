@@ -1,0 +1,10 @@
+<?php
+include(FUN_ROOT.'order.fun.php');
+include(FUN_ROOT.'product.fun.php');
+
+$user_id = $_SESSION['user_id'];
+
+
+
+die(in_success(0));
+

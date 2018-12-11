@@ -1,0 +1,18 @@
+<!DOCTYPE html><html><head><meta name=viewport content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"><meta charset=utf-8><title>极可家</title><script src="http://api.map.baidu.com/api?v=2.0&ak=2OjBdPwgnDYFK84dgzXifbp0Q3SaLiNv"></script><script>window.alert = function(str) {  
+        var alertBox = document.createElement("div");  
+        var alertBg = document.createElement("div");  
+        alertBox.id="alertBox";  
+        alertBg.id="alertBg";   
+        var strHtml = "";  
+        strHtml += '<div id="alerttitle">系统提示：<div id="alertclose" onclick="certainFunc()">x</div></div>';  
+        strHtml += '<div id="alertcontent">'+str+'</div>';  
+        strHtml += '<div id="alertcertain"><input id="alertbtn" type="button" value="确 定" onclick="certainFunc()"/></div>';  
+        alertBox.innerHTML = strHtml;  
+        document.body.appendChild(alertBg);  
+        document.body.appendChild(alertBox);   
+        certainFunc = function() {  
+          alertBg.parentNode.removeChild(alertBg);  
+          alertBox.parentNode.removeChild(alertBox);  
+        };  
+                 
+    }</script><link href=../addons/we7_jkj/template/mobile/static/css/app.f8b89578835c93d7b8cf746d8a9e8b1f.css rel=stylesheet></head><body><div id=app></div><script type=text/javascript src=../addons/we7_jkj/template/mobile/static/js/manifest.62b5547ade2d6e72fe66.js></script><script type=text/javascript src=../addons/we7_jkj/template/mobile/static/js/vendor.f2030a35a34b4eb4eeef.js></script><script type=text/javascript src=../addons/we7_jkj/template/mobile/static/js/app.bd6cc09f47737ac1d78c.js></script></body></html>

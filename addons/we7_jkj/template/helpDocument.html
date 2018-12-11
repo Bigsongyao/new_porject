@@ -1,0 +1,99 @@
+{template 'header'}
+<script>var require = { urlArgs: 'v=20170802' };</script>
+<script type="text/javascript" src="./resource/js/app/util.js?v=20170802"></script>
+<script type="text/javascript" src="./resource/js/app/common.min.js?v=20170802"></script>
+<script type="text/javascript" src="./resource/js/require.js?v=20170802"></script>
+<link href="{MODULE_URL}static/web/my.css" rel="stylesheet" type="text/css" />
+<div class="page-container">
+    <!-- BEGIN SIDEBAR -->
+    {template 'leftmenu'}
+    <!-- END SIDEBAR -->
+    <!-- BEGIN CONTENT -->
+    <div class="page-content-wrapper">
+        <!-- BEGIN CONTENT BODY -->
+        <div class="page-content">
+            <!-- BEGIN PAGE HEADER-->
+            <!-- BEGIN PAGE BAR -->
+
+            <!-- END PAGE BAR -->
+            <!-- BEGIN PAGE TITLE-->
+
+            <!-- END PAGE TITLE-->
+            <!-- END PAGE HEADER-->
+
+
+            <div class="row">
+                <div class="col-md-12">
+
+                    <div class="tabbable-line boxless tabbable-reversed">
+                        <ul class="nav nav-tabs">
+
+                            <li class="active">
+                                <a href="#tab_0" data-toggle="tab"> 帮助文档 </a>
+                            </li>
+                            <!--<li>
+                                <a href="#tab_1" data-toggle="tab"> 添加幻灯 </a>
+                            </li>-->
+                        </ul>
+                        <div class="tab-content">
+                                <div class="tab-pane active" id="tab_0">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                                        <div class="portlet light portlet-fit ">
+                                            <div class="portlet-title">
+                                                <div class="caption">
+                                                    <i class="icon-settings font-red"></i>
+                                                    <span class="caption-subject font-red sbold uppercase">帮助文档</span><small></small>
+                                                </div>
+                                            </div>
+                                            <div class="portlet-body">
+                                                1、底部导航，APP图标为系统默认，分类下的小程序图标不起作用，可自由替换images文件夹中的图片;<br/>
+                                                2、首页，只显示一级分类同模块名称的数据，如一级分类是 文章模型，首页只显示此一级模块下的文章模型，不显示此分类下的产品模型或单页模型<br/>
+                                                3、首页单页模型显示，默认只显示单页模型下的第一条数据，如 关于我们下面分  企业简介，企业文化，企业荣誉，等，默认显示 企业简介。<br/>
+                                            </div>
+                                        </div>
+                                        <!-- END EXAMPLE TABLE PORTLET-->
+                                    </div>
+                                </div>
+                            </div>
+                                <div class="tab-pane" id="tab_1">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <!-- BEGIN PORTLET-->
+                                        <div class="portlet light form-fit ">
+                                            <div class="portlet-title">
+                                                <div class="caption">
+                                                    <i class="icon-pin font-red"></i>
+                                                    <span class="caption-subject font-red sbold uppercase">幻灯管理</span>
+                                                </div>
+                                            </div>
+                                            <div class="portlet-body ">
+                                                <!-- BEGIN FORM-->
+                                                <!-- END FORM-->
+                                            </div>
+                                        </div>
+                                        <!-- END PORTLET-->
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- BEGIN : RIBBONS -->
+
+            <!-- END : RIBBONS -->
+        </div>
+        <!-- END CONTENT BODY -->
+    </div>
+    <!-- END CONTENT -->
+</div>
+<!-- END CONTAINER -->
+
+
+{template 'footer'}
+
+

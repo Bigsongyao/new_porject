@@ -1,0 +1,432 @@
+{template 'header'}
+<script>var require = { urlArgs: 'v=20170802' };</script>
+<script type="text/javascript" src="./resource/js/app/util.js?v=20170802"></script>
+<script type="text/javascript" src="./resource/js/app/common.min.js?v=20170802"></script>
+<script type="text/javascript" src="./resource/js/require.js?v=20170802"></script>
+<link href="{MODULE_URL}static/web/my.css" rel="stylesheet" type="text/css" />
+<script>
+
+</script>
+<div class="page-container">
+    <!-- BEGIN SIDEBAR -->
+    {template 'leftmenu'}
+    <!-- END SIDEBAR -->
+    <!-- BEGIN CONTENT -->
+    <div class="page-content-wrapper">
+        <!-- BEGIN CONTENT BODY -->
+        <div class="page-content">
+            <!-- BEGIN PAGE HEADER-->
+            <!-- BEGIN PAGE BAR -->
+
+            <!-- END PAGE BAR -->
+            <!-- BEGIN PAGE TITLE-->
+
+            <!-- END PAGE TITLE-->
+            <!-- END PAGE HEADER-->
+
+
+            <div class="row">
+                <div class="col-md-12">
+
+                    <div class="tabbable-line boxless tabbable-reversed">
+                        <ul class="nav nav-tabs">
+
+                            <li id="listfl" {if $fun == 'display'||empty($fun)}class="active"{/if}>
+                                <a href="{php echo $this->createWebUrl('shops',array('fun'=>'display'));}" > 商店列表 </a><!--data-toggle="tab"-->
+                            </li>
+                            <li id="itemfl" {if $fun == 'post' && empty($id)}class="active"{/if}>
+                                <a href="{php echo $this->createWebUrl('shops',array('fun'=>'post'));}" > 添加商店 </a> <!--data-toggle="tab"-->
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            {if $fun == 'display' || $fun == 'search'}
+                                <div class="tab-pane active" id="tab_0">
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                                        <div class="portlet light portlet-fit ">
+                                            <div class="portlet-body">
+                                                <div class="table-scrollable">
+                                                    <table class="table table-striped table-bordered table-advance table-hover" style="text-align: center;">
+                                                        <thead>
+                                                        <tr>
+                                                            <th style="width:50px">序号</th>
+                                                            <th style="width:30%">名称</th>
+                                                            <th style="width:30%;">地址</th>
+                                                            <th style="width:10%">店长</th>
+                                                            <th style="width:10%">联系电话</th>
+                                                            <th style="text-align:center;">操作</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        {loop $list $index $item}
+                                                        <tr>
+                                                            <td>{php echo $index+1}</td>
+                                                            <td>
+                                                                {$item['shop_name']}
+                                                            </td>
+                                                            <td style="text-align: left;">
+                                                                {$item['all_address']}
+                                                            </td>
+                                                            <td>
+                                                                {$item['shoper']['username']}
+                                                            </td>
+                                                            <td>
+                                                                {$item['shoper']['mobile']}
+                                                            </td>
+
+                                                            <td style="text-align:center; ">
+                                                                <a href="{php echo $this->createWebUrl('shops',array('fun'=>'post','shop_id' => $item['shop_id']))}" title="编辑">编辑</a>&nbsp;-&nbsp;
+                                                                <a onclick="return confirm('此操作不可恢复，确认吗？'); return false;" href="{php echo $this->createWebUrl('shops',array('fun'=>'delete','shop_id' => $item['shop_id']))}" title="删除">删除</a>
+                                                            </td>
+                                                        </tr>
+                                                        {/loop}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- END EXAMPLE TABLE PORTLET-->
+                                    </div>
+                                </div>
+                            </div>
+                            {/if}
+                            {if $fun == 'post'}
+                                <style>
+                                    #allmap{height:500px;width:100%;}
+                                </style>
+                                <div class="tab-pane active" id="tab_1">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <!-- BEGIN PORTLET-->
+                                        <div class="portlet light form-fit ">
+                                            <div class="portlet-title">
+                                                <div class="caption">
+                                                    <i class="icon-pin font-red"></i>
+                                                    <span class="caption-subject font-red sbold uppercase">编辑商店</span>
+                                                </div>
+                                            </div>
+                                            <div class="portlet-body form">
+                                                <!-- BEGIN FORM-->
+                                                <form action="" method="post"  class="form-horizontal form-bordered">
+                                                    <div class="form-body">
+                                                        <div class="form-group form-md-line-input">
+                                                            <label class="control-label col-md-3">店铺名称</label>
+                                                            <div class="col-md-3">
+                                                                <input type="text" class="form-control" placeholder="" name="shop_name" value="{$item['shop_name']}">
+                                                                <div class="form-control-focus"> </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group form-md-line-input">
+                                                            <label class="control-label col-md-3">店长</label>
+                                                            <div class="col-md-2">
+                                                                <input type="text" readonly class="form-control" id="shoper_name" value="{if $item['shoper_id']}{$item['shoper']['username']}{else}未设置{/if}"/>
+                                                                <input type="hidden" value="{$item['shoper']['user_id']}" name="shoper_id" id="shoper_id">
+                                                            </div>
+                                                            <div class="col-md-1">
+                                                                <a href="javascript:;" onclick="setShoper({$shop_id})" class="btn green">设置店长</a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group form-md-line-input">
+                                                            <label class="control-label col-md-3">设计师</label>
+                                                            <div class="col-md-1">
+                                                                <a href="javascript:;" onclick="setDesigner({$shop_id})" class="btn green">设置</a>
+                                                                <input type="hidden" value="{$item['designer']}" name="designer">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group form-md-line-input">
+                                                            <label class="control-label col-md-3">门店介绍</label>
+                                                            <div class="col-md-7">
+                                                                {php echo tpl_ueditor('content', $item['content']);}
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group form-md-line-input" style="display: none">
+                                                            <script type="text/javascript">
+                                                                require(['util'], function(util){
+                                                                    util.editor('content', {});
+                                                                });
+                                                            </script>
+                                                        </div>
+                                                        <div class="form-group form-md-line-input">
+                                                            <label class="control-label col-md-3">省市区</label>
+                                                            <div class="col-md-1">
+                                                                <select class="form-control" id="province" name="province" onchange="changeRegion(this, 2, 'city')">
+                                                                    <option value="0">请选择</option>
+                                                                    {loop $province $row}
+                                                                    <option value="{$row['region_id']}" {if $row['region_id'] == $item['province']}selected{/if}>{$row['region_name']}</option>
+                                                                    {/loop}
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-md-1">
+                                                                <select class="form-control" id="city" name="city" onchange="changeRegion(this, 3, 'district')">
+                                                                    <option value="0">请选择</option>
+                                                                    {loop $city $row}
+                                                                    <option value="{$row['region_id']}" {if $row['region_id'] == $item['city']}selected{/if}>{$row['region_name']}</option>
+                                                                    {/loop}
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-md-1">
+                                                                <select class="form-control" id="district" name="district" onchange="geocoder()">
+                                                                    <option value="0">请选择</option>
+                                                                    {loop $district $row}
+                                                                    <option value="{$row['region_id']}" {if $row['region_id'] == $item['district']}selected{/if}>{$row['region_name']}</option>
+                                                                    {/loop}
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group form-md-line-input">
+                                                            <label class="control-label col-md-3">地址</label>
+                                                            <div class="col-md-3">
+                                                                <input type="text" class="form-control" placeholder="" id="address" name="address" onblur="geocoder()" value="{$item['address']}">
+                                                                <div class="form-control-focus"> </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group form-md-line-input">
+                                                            <label class="control-label col-md-3">地图</label>
+                                                            <div class="col-md-8">
+                                                                <div id="allmap"></div>
+                                                                <input type="hidden" name="lng" id="lng" value="{$item['lng']}">
+                                                                <input type="hidden" name="lat" id="lat" value="{$item['lat']}">
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <input  type="submit" name='submit' class="btn green" data-dismiss="modal" value="提交" />
+                                                            <input type="hidden" name="token" value="{$_W['token']}">
+                                                            <input type="hidden" name="shop_id" id="shop_id" value="{$shop_id}">
+                                                        </div>
+                                                    </div>
+                                                </form>
+
+                                                <!-- END FORM-->
+                                            </div>
+                                        </div>
+                                        <!-- END PORTLET-->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"></div>
+                            <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"></div>
+
+                            <!-- 百度地图api -->
+                            <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=2bVp1W1qGDl22jZ5my8tLyUxTkPijhCr"></script>
+                            <script type="text/javascript">
+                                // 百度地图API功能
+                                var map = new BMap.Map("allmap");
+                                var point = new BMap.Point({$item['lng']}, {$item['lat']});
+                                map.centerAndZoom(point, 15);
+                                map.addOverlay(new BMap.Marker(point));
+
+                                var navigationControl = new BMap.NavigationControl({
+                                    // 靠左上角位置
+                                    anchor: BMAP_ANCHOR_TOP_LEFT,
+                                    // LARGE类型
+                                    type: BMAP_NAVIGATION_CONTROL_LARGE,
+                                    // 启用显示定位
+                                    enableGeolocation: true
+                                });
+                                map.addControl(navigationControl);
+                                map.enableScrollWheelZoom();   //启用滚轮放大缩小，默认禁用
+                                map.enableContinuousZoom();    //启用地图惯性拖拽，默认禁用
+
+                                map.addEventListener("click",function(e){
+                                    map.clearOverlays();
+                                    var marker = new BMap.Marker(new BMap.Point(e.point.lng, e.point.lat)); // 创建点
+                                    map.addOverlay(marker);                                                 //增加点
+                                    $('#lng').val(e.point.lng);
+                                    $('#lat').val(e.point.lat);
+                                });
+
+                                function changeRegion(obj, type, child){
+                                    var region_id = $(obj).val();
+                                    $.ajax({
+                                        url: '{php echo $this->createWebUrl("region")}',
+                                        type: 'post',
+                                        data: {
+                                            type: type,
+                                            region_id: region_id
+                                        },
+                                        datatype: 'json',
+                                        success: function (data) {
+                                            var data = eval('(' + data + ')');
+
+                                            $(obj).parent().nextAll().find('select').empty().append('<option value="0">请选择</option>');
+
+                                            for(x in data){
+                                                $('#'+child).append('<option value="'+data[x]['region_id']+'">'+data[x]['region_name']+'</option>');
+                                            }
+                                            geocoder();
+                                        }
+                                    })
+                                }
+
+                                function geocoder(){
+                                    var province = $('#province').val() == 0 ? '' : $('#province option:selected').text();
+                                    var city = $('#city').val() == 0 ? '' : $('#city option:selected').text();
+                                    var district = $('#district').val() == 0 ? '' : $('#district option:selected').text();
+                                    var address = $('#address').val();
+
+                                    if(province.length > 0 && city.length > 0 && district.length > 0){
+                                        var myGeo = new BMap.Geocoder();
+                                        // 将地址解析结果显示在地图上，并调整地图视野
+                                        myGeo.getPoint(province+city+district+address, function(point){
+                                            if (point) {
+                                                map.centerAndZoom(point, 15);
+                                            }
+                                        },city);
+                                    }
+                                }
+                            </script>
+                            {/if}
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- BEGIN : RIBBONS -->
+
+            <!-- END : RIBBONS -->
+        </div>
+        <!-- END CONTENT BODY -->
+    </div>
+    <!-- END CONTENT -->
+</div>
+<!-- END CONTAINER -->
+
+
+{template 'footer'}
+
+
+
+<script>
+    $(document).ready(function () {
+        active($('#li_module'),$('#li_module_notice'));
+        $('.form-group').css('padding-top','0px');
+        dfirst = true;
+        sfirst = true;
+    });
+
+    function setShoper(shop_id){
+        if(sfirst){
+            $.ajax({
+                url: '{php echo $this->createWebUrl("shops",array("fun"=>"set", "type"=>"setShoper"))}',
+                type: 'post',
+                data: {
+                    shop_id: shop_id,
+                },
+                datatype: 'html',
+                success: function (code) {
+                    //var data = eval('(' + data + ')');
+                    sfirst = false;
+                    $('#myModal1').html(code).modal('show');
+                }
+            })
+        }else{
+            $('#myModal1').modal('show');
+        }
+
+    }
+
+    function setDesigner(shop_id){
+        if(dfirst) {
+            $.ajax({
+                url: '{php echo $this->createWebUrl("shops",array("fun"=>"set", "type"=>"setDesigner"))}',
+                type: 'post',
+                data: {
+                    shop_id: shop_id,
+                },
+                datatype: 'html',
+                success: function (code) {
+                    //var data = eval('(' + data + ')');
+                    dfirst = false;
+                    $('#myModal2').html(code).modal('show');
+                }
+            })
+        }else{
+            $('#myModal2').modal('show');
+        }
+    }
+
+    function searchUser(shop_id, type){
+        var keyword = $('#keyword').val();
+        $.ajax({
+            url: '{php echo $this->createWebUrl("shops",array("fun"=>"search_user"))}',
+            type: 'post',
+            data: {
+                shop_id: shop_id,
+                type: type,
+                keyword: keyword
+            },
+            datatype: 'json',
+            success: function (data) {
+                var data = eval('(' + data + ')');
+
+                $('#set_'+type).empty().append('<option value="0">请选择</option>');
+                for(x in data){
+                    console.log(data[x]['user_id']);
+                    $('#set_'+type).append('<option value="'+data[x]['user_id']+'">'+data[x]["username"]+'</option>');
+                }
+            }
+        })
+    }
+
+    function editShoper(){
+        var shoper_id = $('#set_shop').val();
+        var shoper_name = $('#set_shop').find('option:selected').text();
+
+        if(shoper_id == 0 || typeof shoper_id == 'undefined'){
+            alert('必选选择一个有效的店长');
+            return false;
+        }
+
+        $('#shoper_name').val(shoper_name);
+        $('#shoper_id').val(shoper_id);
+
+        $('#myModal1').modal('hide')
+    }
+
+    function add_designer(){
+        var designer_id = $('#set_designer').val();
+        var designer_name = $('#set_designer').find('option:selected').text();
+        var check = true;
+
+        if(designer_id == 0 || typeof designer_id == 'undefined'){
+            return false;
+        }
+
+        $('#add_designer input[type="checkbox"]').each(function(){
+            if($(this).val() == designer_id){
+                $(this).prop("checked", true);
+                check = false;
+            }
+        });
+
+        if(check){
+            html = '<label class="col-md-3">' +
+                    '<input type="checkbox" checked value="'+designer_id+'" name="designer[]" />' +
+                    designer_name +
+                    '</label>';
+            $('#add_designer').append(html);
+
+        }
+    }
+
+    function editDesigner(){
+        var designer = '';
+
+        $('#add_designer input[type="checkbox"]').each(function(){
+            if($(this).is(':checked')){
+                designer += $(this).val()+',';
+            }
+        });
+
+        designer=designer.substring(0,designer.length-1)
+        $('[name="designer"]').val(designer);
+
+        $('#myModal2').modal('hide');
+    }
+</script>
+

@@ -1,0 +1,406 @@
+{template 'header'}
+<script>var require = { urlArgs: 'v=20170802' };</script>
+<script type="text/javascript" src="./resource/js/app/util.js?v=20170802"></script>
+<script type="text/javascript" src="./resource/js/app/common.min.js?v=20170802"></script>
+<script type="text/javascript" src="./resource/js/require.js?v=20170802"></script>
+<link href="{MODULE_URL}static/web/my.css" rel="stylesheet" type="text/css" />
+<script>
+
+</script>
+<div class="page-container">
+    <!-- BEGIN SIDEBAR -->
+    {template 'leftmenu'}
+    <!-- END SIDEBAR -->
+    <!-- BEGIN CONTENT -->
+    <div class="page-content-wrapper">
+        <!-- BEGIN CONTENT BODY -->
+        <div class="page-content">
+            <!-- BEGIN PAGE HEADER-->
+            <!-- BEGIN PAGE BAR -->
+
+            <!-- END PAGE BAR -->
+            <!-- BEGIN PAGE TITLE-->
+
+            <!-- END PAGE TITLE-->
+            <!-- END PAGE HEADER-->
+
+
+            <div class="row">
+                <div class="col-md-12">
+
+                    <div class="tabbable-line boxless tabbable-reversed">
+                        <ul class="nav nav-tabs">
+
+                            <li id="listfl" {if $fun == 'display'||empty($fun)}class="active"{/if}>
+                                <a href="{php echo $this->createWebUrl('roles',array('fun'=>'display'));}" > 用户列表 </a><!--data-toggle="tab"-->
+                            </li>
+                            {if $user_id}
+                            <li id="itemfl" {if $fun == 'post' && empty($id)}class="active"{/if}>
+                                <a href="{php echo $this->createWebUrl('roles',array('fun'=>'post', 'user_id' => $user_id));}" > 编辑用户 </a> <!--data-toggle="tab"-->
+                            </li>
+                            {/if}
+                        </ul>
+                        <div class="tab-content">
+                            {if $fun == 'display'}
+                            <div class="tab-pane active" id="tab_0">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <form action="" method="get" class="form-horizontal">
+                                            <input type="hidden" name="c" value="site">
+                                            <input type="hidden" name="a" value="entry">
+                                            <input type="hidden" name="m" value="we7_jkj">
+                                            <input type="hidden" name="do" value="roles">
+                                            <input type="hidden" name="fun" value="display">
+
+                                            <div class="form-body">
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <div class="form-group form-md-line-input">
+                                                            <label class="col-md-3 control-label">用户角色</label>
+                                                            <div class="col-md-9">
+                                                                <select class="form-control" name="role" id="role">
+                                                                    <option value="all" {if $_GPC['role'] == 'all'}selected{/if}>所有角色</option>
+                                                                    <option value="0" {if $_GPC['role'] == '0'}selected{/if}>会员</option>
+                                                                    <option value="1" {if $_GPC['role'] == '1'}selected{/if}>设计师</option>
+                                                                    <option value="2" {if $_GPC['role'] == '2'}selected{/if}>城市负责人</option>
+                                                                </select>
+                                                                <div class="form-control-focus"> </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group form-md-line-input  has-error">
+                                                            <label class="col-md-3 control-label">关键词</label>
+                                                            <div class="col-md-9">
+                                                                <input class="form-control" name="keyword" placeholder="用户名/手机/昵称" id="keyword" type="text" value="{$_GPC['keyword']}">
+                                                                <div class="form-control-focus"> </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group form-md-line-input ">
+                                                            <input type="submit" value="搜索" class="btn red-haze" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                        </form>
+
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                                        <div class="portlet light portlet-fit ">
+                                            <div class="portlet-body">
+                                                <div class="table-scrollable">
+                                                    <table class="table table-striped table-bordered table-advance table-hover" style="text-align: center;">
+                                                        <thead>
+                                                        <tr>
+                                                            <th style="width:50px">序号</th>
+                                                            <th style="text-align:center;width:20%">用户名/昵称</th>
+                                                            <th style="text-align:center;width:10%;">手机号吗</th>
+                                                            <th style="text-align:center;width:20%">身份</th>
+                                                            <th style="text-align:center;width:30%">注册时间</th>
+                                                            <th style="text-align:center;">操作</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        {loop $list $index $item}
+                                                        <tr>
+                                                            <td>{php echo $index+1}</td>
+                                                            <td>
+                                                                {$item['username']}/{$item['nickname']}
+                                                            </td>
+                                                            <td style="text-align: left;">
+                                                                {$item['mobile']}
+                                                            </td>
+                                                            <td>
+                                                                {if in_array(0, $item['type'])}
+                                                                会员、
+                                                                {/if}
+                                                                {if in_array(1, $item['type'])}
+                                                                设计师、
+                                                                {/if}
+                                                                {if in_array(2, $item['type'])}
+                                                                城市负责人
+                                                                {/if}
+                                                            </td>
+                                                            <td>
+                                                                {php echo date('Y-m-d h:i:s',$item['addtime'])}
+                                                            </td>
+
+                                                            <td style="text-align:center; ">
+                                                                <a href="{php echo $this->createWebUrl('roles',array('fun'=>'post','user_id' => $item['user_id']))}" title="编辑">编辑</a>&nbsp;-&nbsp;
+                                                                <a onclick="return confirm('此操作不可恢复，确认吗？'); return false;" href="{php echo $this->createWebUrl('roles',array('fun'=>'delete','shop_id' => $item['shop_id']))}" title="删除">删除</a>
+                                                            </td>
+                                                        </tr>
+                                                        {/loop}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- END EXAMPLE TABLE PORTLET-->
+                                    </div>
+                                </div>
+                            </div>
+                            {/if}
+                            {if $fun == 'post'}
+                                <style>
+                                    #allmap{height:500px;width:100%;}
+                                </style>
+                                <div class="tab-pane active" id="tab_1">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <!-- BEGIN PORTLET-->
+                                        <div class="portlet light form-fit ">
+                                            <div class="portlet-title">
+                                                <div class="caption">
+                                                    <i class="icon-pin font-red"></i>
+                                                    <span class="caption-subject font-red sbold uppercase">编辑会员</span>
+                                                </div>
+                                            </div>
+                                            <div class="portlet-body form">
+                                                <!-- BEGIN FORM-->
+                                                <form action="" method="post"  class="form-horizontal form-bordered">
+                                                    <div class="form-body">
+                                                        <div class="form-group form-md-line-input">
+                                                            <label class="control-label col-md-3">用户名</label>
+                                                            <div class="col-md-3">
+                                                                <input type="text" readonly class="form-control" value="{$item['username']}">
+                                                                <div class="form-control-focus"> </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group form-md-line-input">
+                                                            <label class="control-label col-md-3">昵称</label>
+                                                            <div class="col-md-3">
+                                                                <input type="text" class="form-control" name="nickname" value="{$item['nickname']}">
+                                                                <div class="form-control-focus"> </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group form-md-line-input">
+                                                            <label class="control-label col-md-3">真实姓名</label>
+                                                            <div class="col-md-3">
+                                                                <input type="text" class="form-control" name="realname" value="{$item['realname']}">
+                                                                <div class="form-control-focus"> </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group form-md-line-input">
+                                                            <label class="control-label col-md-3">用户头像</label>
+                                                            <div class="col-md-4">
+                                                                <img src="{$item['headimg']}" width="100" alt="用户头像" />
+                                                            </div>
+                                                        </div>
+                                                        <!--<div class="form-group form-md-line-input">
+                                                            <label class="control-label col-md-3">用户角色</label>
+                                                            <div class="col-md-3">
+                                                                <label><input type="checkbox" name="type[]" {if in_array(0, $item['type'])}checked{/if} value="0"/>会员 </label>&nbsp;&nbsp;
+                                                                <label><input type="checkbox" name="type[]" {if in_array(1, $item['type'])}checked{/if} value="1"/>设计师 </label>&nbsp;&nbsp;
+                                                                <label><input type="checkbox" name="type[]" {if in_array(2, $item['type'])}checked{/if} value="2"/>城市负责人 </label>
+                                                            </div>
+                                                        </div>-->
+                                                        <div class="form-group form-md-line-input">
+                                                            <label class="control-label col-md-3">性别</label>
+                                                            <div class="col-md-3">
+                                                                <label><input type="radio" name="sex" {if empty($item['sex'])}checked{/if} value="0"/>男 </label>&nbsp;&nbsp;
+                                                                <label><input type="radio" name="sex" {if !empty($item['sex'])}checked{/if} value="1"/>女 </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group form-md-line-input">
+                                                            <label class="control-label col-md-3">邮箱</label>
+                                                            <div class="col-md-3">
+                                                                <input type="text" readonly class="form-control" value="{$item['email']}">
+                                                                <div class="form-control-focus"> </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group form-md-line-input">
+                                                            <label class="control-label col-md-3">手机号码</label>
+                                                            <div class="col-md-3">
+                                                                <input type="text" readonly class="form-control" name="mobile" value="{$item['mobile']}">
+                                                                <div class="form-control-focus"> </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group form-md-line-input">
+                                                            <label class="control-label col-md-3">办公电话</label>
+                                                            <div class="col-md-3">
+                                                                <input type="text" min="0"  class="form-control" placeholder="" name="home_phone" value="{$item['home_phone']}">
+                                                                <div class="form-control-focus"> </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group form-md-line-input">
+                                                            <label class="control-label col-md-3">出生日期</label>
+                                                            <div class="col-md-1">
+                                                                <select class="form-control" id="birth_year" name="birth_year">
+                                                                    <option value="0">请选择</option>
+                                                                    {php for($i=1940;$i<=date('Y');$i++){}
+                                                                    <option value="{$i}" {if $i == $item['birth_year']}selected{/if}>{$i}年</option>
+                                                                    {php }}
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-md-1">
+                                                                <select class="form-control" id="birth_month" name="birth_month">
+                                                                    <option value="0">请选择</option>
+                                                                    {php for($i=1;$i<=12;$i++){}
+                                                                    <option value="{$i}" {if $i == $item['birth_month']}selected{/if}>{$i}月</option>
+                                                                    {php }}
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-md-1">
+                                                                <select class="form-control" id="birth_day" name="birth_day">
+                                                                    <option value="0">请选择</option>
+                                                                    {php for($i=1;$i<=31;$i++){}
+                                                                    <option value="{$i}" {if $i == $item['birth_day']}selected{/if}>{$i}日</option>
+                                                                    {php }}
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group form-md-line-input">
+                                                            <label class="control-label col-md-3">省市区</label>
+                                                            <div class="col-md-1">
+                                                                <select class="form-control" id="province" name="province" onchange="changeRegion(this, 2, 'city')">
+                                                                    <option value="0">请选择</option>
+                                                                    {loop $province $row}
+                                                                    <option value="{$row['region_id']}" {if $row['region_id'] == $item['province']}selected{/if}>{$row['region_name']}</option>
+                                                                    {/loop}
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-md-1">
+                                                                <select class="form-control" id="city" name="city" onchange="changeRegion(this, 3, 'district')">
+                                                                    <option value="0">请选择</option>
+                                                                    {loop $city $row}
+                                                                    <option value="{$row['region_id']}" {if $row['region_id'] == $item['city']}selected{/if}>{$row['region_name']}</option>
+                                                                    {/loop}
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-md-1">
+                                                                <select class="form-control" id="district" name="district">
+                                                                    <option value="0">请选择</option>
+                                                                    {loop $district $row}
+                                                                    <option value="{$row['region_id']}" {if $row['region_id'] == $item['district']}selected{/if}>{$row['region_name']}</option>
+                                                                    {/loop}
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group form-md-line-input">
+                                                            <label class="control-label col-md-3">地址</label>
+                                                            <div class="col-md-3">
+                                                                <input type="text" class="form-control" placeholder="" id="address" name="address" value="{$item['address']}">
+                                                                <div class="form-control-focus"> </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group form-md-line-input">
+                                                            <label class="control-label col-md-3">状态</label>
+                                                            <div class="col-md-3">
+                                                                <label><input type="radio" name="status" {if !empty($item['status'])}checked{/if} value="1"/>启用 </label>&nbsp;&nbsp;
+                                                                <label><input type="radio" name="status" {if empty($item['status'])}checked{/if} value="0"/>禁用 </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group form-md-line-input">
+                                                            <label class="control-label col-md-3">密码</label>
+                                                            <div class="col-md-3">
+                                                                <input type="password" class="form-control" name="pwd" value="">
+                                                                <div class="form-control-focus"> </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group form-md-line-input">
+                                                            <label class="control-label col-md-3">确认密码</label>
+                                                            <div class="col-md-3">
+                                                                <input type="password" class="form-control" name="cpwd" value="">
+                                                                <div class="form-control-focus"> </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <input  type="submit" name='submit' class="btn green" data-dismiss="modal" value="提交" />
+                                                            <input type="hidden" name="token" value="{$_W['token']}">
+                                                            <input type="hidden" name="user_id" id="user_id" value="{$user_id}">
+                                                        </div>
+                                                    </div>
+                                                </form>
+
+                                                <!-- END FORM-->
+                                            </div>
+                                        </div>
+                                        <!-- END PORTLET-->
+                                    </div>
+                                </div>
+                            </div>
+                            {/if}
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- BEGIN : RIBBONS -->
+
+            <!-- END : RIBBONS -->
+        </div>
+        <!-- END CONTENT BODY -->
+    </div>
+    <!-- END CONTENT -->
+</div>
+<!-- END CONTAINER -->
+
+
+{template 'footer'}
+
+
+
+<script>
+
+    $(document).ready(function () {
+        active($('#li_module'),$('#li_module_notice'));
+        $('.form-group').css('padding-top','0px');
+    });
+
+    function searchProducts(){
+        var key = $('#key').val();
+        var product_id = $('#product_id').val();
+
+        $.ajax({
+            url: '{php echo $this->createWebUrl("products",array("fun"=>"ajax", "op"=>"search"))}',
+            type: 'post',
+            data: {
+                key: key,
+                product_id: product_id
+            },
+            datatype: 'json',
+            success: function (data) {
+                var data = eval('(' + data + ')');
+
+                $('#link_product option').remove();
+
+                for(x in data){
+                    $('#link_product').append('<option value="'+data[x]['product_id']+'">'+data[x]['product_name']+'</option>');
+                }
+            }
+        })
+    }
+
+    function changeRegion(obj, type, child){
+        var region_id = $(obj).val();
+        $.ajax({
+            url: '{php echo $this->createWebUrl("region")}',
+            type: 'post',
+            data: {
+                type: type,
+                region_id: region_id
+            },
+            datatype: 'json',
+            success: function (data) {
+                var data = eval('(' + data + ')');
+
+                $(obj).parent().nextAll().find('select').empty().append('<option value="0">请选择</option>');
+
+                for(x in data){
+                    $('#'+child).append('<option value="'+data[x]['region_id']+'">'+data[x]['region_name']+'</option>');
+                }
+            }
+        })
+    }
+
+</script>
+

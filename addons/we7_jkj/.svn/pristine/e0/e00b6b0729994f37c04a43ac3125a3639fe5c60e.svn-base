@@ -1,0 +1,39 @@
+<?php
+include(FUN_ROOT.'order.fun.php');
+include(FUN_ROOT.'product.fun.php');
+
+$user_id = $_SESSION['user_id'];
+$design_id = intval($_GPC['design_id']);
+$oid = intval($_GPC['oid']);
+
+$sql = "SELECT * FROM ".tablename('jkj_reser_order')." WHERE oid=:oid AND user_id=:user_id AND uniacid=:uniacid";
+$reser_order = pdo_fecth($sql, array(':oid' => $oid, ':uniacid' => $_W['uniacid']));
+
+if(!$reser_order){
+    die(json_encode(in_error(1, '订单不存在')));
+}
+
+if($reser_order['designer']){
+    die(json_encode(in_error(1, '已派送设计师')));
+}
+
+$shop_info = get_shop_info($reser_order['shop_id']);
+if($user_id != $shop_info['shoper_id']){
+    die(json_encode(in_error(1, '权限错误')));
+}
+
+$shop_designer = explode(',', $shop_info['designer']);
+if(!in_array($design_id, $shop_designer)){
+    die(json_encode(in_error(1, '选择的设计师不在该店铺')));
+}
+
+pdo_update('jkj_reser_order', array('designer' => $design_id), array('oid' => $oid));
+order_remind(1, $design_id);
+
+die(in_success(0));
+
+
+
+
+
+

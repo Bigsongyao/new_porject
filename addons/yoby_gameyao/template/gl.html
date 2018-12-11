@@ -1,0 +1,86 @@
+{template 'common/header'}
+<link href="{MODULE_URL}/template/mobile/weui/style.css" rel="stylesheet"/>
+<script>
+$(function(){
+ $(".ui-table").each(function () {
+        var _this = $(this);
+        _this.find("tr:even").css("background-color", "#f5f5f5");
+        _this.find("tr:odd").css("background-color", "#fff");
+        _this.find("tr:not(:first)").hover(function () {
+            $(this).attr("bColor", $(this).css("background-color")).css("background-color", "#fcf8e3").css("cursor", "pointer");
+        }, function () {
+            $(this).css("background-color", $(this).attr("bColor"));
+        });
+ 
+    });
+    });
+    </script>
+<div class="main">
+<ul class="nav nav-tabs">
+	<li class="active"><a href="{php echo $this->createWebUrl('gl');}">列表</a></li>
+	<li><a data-toggle="tooltip" data-placement="top" title="添加规则" href="./index.php?c=platform&a=reply&do=post&m={php echo $this->m_name}">添加</a></li>
+	
+</ul>	
+	<div style="padding:15px;">
+		<form action="" method="post">
+		<table class="ui-table ui-border">
+			<thead class="navbar-inner">
+				<tr>
+					<th align="center" >ID</th>						
+                    <th align="center" >标题</th>
+					<th align="center">参与时间</th>
+					<th align="center" >参与人数</th>
+					<th align="center" >活动状态</th>
+					<th >操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				{loop $list $row}
+					<tr>		
+						<td align="center" style="text-align:center;">{$row['id']}</td>
+            <td align="center" style="text-align:center;{if $row['isok'] == '0'}color:red;{/if}"><a href="./index.php?c=platform&a=reply&do=post&m={php echo $this->m_name}&rid={$row['rid']}"  title="{$row['g_title']}">{php echo cutstr($row['g_title'],15,'...');}</a></td>
+						<td align="center" style="font-size:12px; color:#666text-align:center;">{php echo date('Y-m-d H:i:s',$row['start_time'])} - {php echo date('Y-m-d H:i:s',$row['end_time'])}</td>
+						<td align="center" style="font-size:12px; color:#666; text-align:center;"><?php echo $n = pdo_fetchcolumn("select count(*) from ".tablename($this->fans)."  where  rid=".$row['rid']." and  openid!=''"); ?></td>
+						<td align="center" style="font-size:12px; color:#666; text-align:center;"><?php
+						if($row['isok']==2){
+						echo '暂停中';
+						}elseif($row['isok']==1){
+						echo '进行中';
+						}else{
+						echo '未开始或提前结束';
+						}
+						  ?></td>
+						<td style="text-align:center;width:250px;">
+						<a  data-toggle="tooltip" data-placement="top" title="添加管理奖品" class="btn btn-success btn-sm" href="{php echo $this->createWebUrl('award',array('rid'=>$row['rid']))}">管理奖品</a>
+						<a  data-toggle="tooltip" data-placement="top" title="中奖数据" class="btn btn-success btn-sm" href="{php echo $this->createWebUrl('award2',array('rid'=>$row['rid']))}">中奖数据</a>
+							<a data-toggle="tooltip" data-placement="top" title="导出中奖csv" href="{php echo $this->createWebUrl('daodata2',array('rid'=>$row['rid']))}"  class="btn btn-success btn-sm">导出中奖</a>
+                        	<a  data-toggle="tooltip" data-placement="top" title="编辑" class="btn btn-success btn-sm" href="./index.php?c=platform&a=reply&do=post&m={php echo $this->m_name}&rid={$row['rid']}">编辑</a>
+                        
+                        	<a data-toggle="tooltip" data-placement="top" title="导出排行榜csv" href="{php echo $this->createWebUrl('daodata',array('rid'=>$row['rid']))}"  class="btn btn-success btn-sm hidden">导出排行榜</a>
+
+                        	<a data-toggle="tooltip" data-placement="top" title="排行榜查看" href="{php echo $this->createWebUrl('top',array('rid'=>$row['rid']))}"  class="btn btn-success btn-sm hidden">排行榜</a>
+                        
+                        	
+                        	<a data-toggle="tooltip" data-placement="top" title="删除" class="btn btn-sm btn-danger" href="./index.php?c=platform&a=reply&do=delete&m={php echo $this->m_name}&rid={$row['rid']}"   onclick="return confirm('此操作不可恢复，确认吗？'); return false;">删除</a>
+                        </td>
+					</tr>
+				{/loop}
+			</tbody>
+		</table>
+	</form>
+		{$pager}
+	</div>
+</div>
+
+<script>
+
+require(['bootstrap'],function($){
+		$('[data-toggle="tooltip"]').hover(function(){
+			$(this).tooltip('show');
+		},function(){
+			$(this).tooltip('hide');
+		});
+	});
+</script>
+
+{template 'common/footer'}

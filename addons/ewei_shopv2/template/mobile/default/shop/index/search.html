@@ -1,0 +1,53 @@
+<!-- <form action="{php echo mobileUrl('goods')}" method="post">
+	<div class="fui-searchbar bar">
+		<div class="searchbar center">
+			<input type="submit" class="searchbar-cancel searchbtn" value="搜索" />
+			<div class="search-input">
+				<i class="icon icon-search"></i>
+				<input type="search" placeholder="输入关键字..." class="search" name="keywords">
+			</div>
+		</div>
+	</div>
+</form>
+<script>
+	$(function () {
+		$("input[name='keywords']").focusin(function () {
+			$(this).removeAttr('placeholder');
+		});
+		$("input[name='keywords']").focusout(function () {
+			$(this).attr('placeholder','输入关键字...');
+		});
+		$("form").submit(function () {
+			$(this).find("input[name='keywords']").blur();
+		});
+	});
+</script> -->
+
+{if !empty($hot_goods)}
+    <div class="fui-line" style="background: #f4f4f4;">
+				<div class="text">达人推荐</div>
+        <div class="text text-riw"><i class="title_left"></i> 達人推薦 <i class="title_right"></i></div>
+			</div>
+			<div class="fui-goods-group block border">
+        {loop $hot_goods $item}
+          <div class="fui-goods-item" data-goodsid="{$item['id']}" data-type="{$item['type']}">
+					<a href="{php echo mobileUrl('goods/detail')}&id={$item['id']}">
+						<div class="image" data-lazy-background="../attachment/{$item['thumb']}">
+							
+						</div>
+					</a>
+					<div class="detail">
+						<a href="{php echo mobileUrl('goods/detail')}&id={$item['id']}>
+							<div class="name">
+								{$item['title']}
+							</div>
+              <div style="font-size: 0.5rem;" class="name">
+                {$item['subtitle']}
+							</div>
+						</a>
+						
+				</div>
+          
+        {/loop}
+      </div>
+{/if}

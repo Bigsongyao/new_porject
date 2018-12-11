@@ -1,0 +1,19 @@
+<?php
+include(FUN_ROOT.'order.fun.php');
+include(FUN_ROOT.'product.fun.php');
+
+$user_id = $_SESSION['user_id'];
+$role = in_array($_GPC['role'], array('user', 'designer', 'shoper')) ? $_GPC['role'] : 'user';
+
+switch($role){
+    case 'user':
+        break;
+    case 'designer':
+        break;
+    case 'shoper':
+        break;
+}
+
+
+die(in_success(0));
+

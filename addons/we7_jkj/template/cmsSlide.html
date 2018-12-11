@@ -1,0 +1,363 @@
+{template 'header'}
+<script>var require = { urlArgs: 'v=20170802' };</script>
+<script type="text/javascript" src="./resource/js/app/util.js?v=20170802"></script>
+<script type="text/javascript" src="./resource/js/app/common.min.js?v=20170802"></script>
+<script type="text/javascript" src="./resource/js/require.js?v=20170802"></script>
+<link href="{MODULE_URL}static/web/my.css" rel="stylesheet" type="text/css" />
+<div class="page-container">
+    <!-- BEGIN SIDEBAR -->
+    {template 'leftmenu'}
+    <!-- END SIDEBAR -->
+    <!-- BEGIN CONTENT -->
+    <div class="page-content-wrapper">
+        <!-- BEGIN CONTENT BODY -->
+        <div class="page-content">
+            <!-- BEGIN PAGE HEADER-->
+            <!-- BEGIN PAGE BAR -->
+
+            <!-- END PAGE BAR -->
+            <!-- BEGIN PAGE TITLE-->
+
+            <!-- END PAGE TITLE-->
+            <!-- END PAGE HEADER-->
+
+
+            <div class="row">
+                <div class="col-md-12">
+
+                    <div class="tabbable-line boxless tabbable-reversed">
+                        <ul class="nav nav-tabs">
+
+                            <li id="listfl" {if $fun == 'display'||empty($fun)}class="active"{/if}>
+                                <a href="{php echo $this->createWebUrl('cmsSlide',array('fun'=>'display'));}" > 幻灯列表 </a><!--data-toggle="tab"-->
+                            </li>
+                            <li id="itemfl" {if $fun == 'post' && empty($id)}class="active"{/if}>
+                                <a href="{php echo $this->createWebUrl('cmsSlide',array('fun'=>'post'));}" > 添加幻灯 </a> <!--data-toggle="tab"-->
+                            </li>
+                            {if $fun == 'post' && $id}
+                            <li {if $fun == 'post' && !empty($id)}class="active"{/if}><a href="{php echo $this->createWebUrl('cmsSlide',array('fun'=>'post','id'=>$id));}">编辑幻灯</a></li>
+                            {/if}
+                        </ul>
+                        <div class="tab-content">
+                            {if $fun == 'display' || empty($fun)}
+                                <div class="tab-pane active" id="tab_0">
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <!-- BEGIN EXAMPLE TABLE PORTLET-->
+                                        <div class="portlet light portlet-fit ">
+                                            <div class="portlet-title">
+                                                <div class="caption">
+                                                    <i class="icon-settings font-red"></i>
+                                                    <span class="caption-subject font-red sbold uppercase">幻灯片管理</span><small></small>
+                                                </div>
+                                            </div>
+                                            <div class="portlet-body">
+                                                <div class="table-scrollable">
+                                                    <table class="table table-striped table-bordered table-advance table-hover" style="text-align: center;">
+                                                        <thead>
+                                                        <tr>
+                                                            <th style="width:50px">序号</th>
+                                                            <th style="text-align: center">图片</th>
+                                                            <th style="text-align: center">所属分类</th>
+
+                                                            <th style="width:200px; text-align:center;">操作</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        {loop $list $index $item}
+                                                        <tr>
+                                                            <td style="vertical-align: middle">{php echo $index+1}</td>
+                                                            <td style="vertical-align: middle">
+
+                                                                {if $item['thumb']}<img src="{php echo tomedia($item['thumb']);}" style="width: 50px; height: auto;">{/if}
+                                                            </td>
+                                                            <td style="vertical-align: middle">
+                                                                {if $item['cateid']==0}PC端-首页幻灯{elseif $item['cateid']=='10000000'}PC端-背景幻灯{elseif $item['cateid']=='-10000000'}小程序-首页幻灯{elseif $item['cateid']<0}小程序- {$item['cname']}{else}PC端- {$item['cname']}{/if}
+                                                            </td>
+                                                            <td  style="vertical-align: middle">
+                                                                <a href="{php echo $this->createWebUrl('cmsslide',array('fun'=>'post','id' => $item['id']))}" title="编辑">编辑</a>&nbsp;-&nbsp;
+                                                                <a onclick="return confirm('此操作不可恢复，确认吗？'); return false;" href="{php echo $this->createWebUrl('cmsslide',array('fun'=>'delete','id' => $item['id']))}" title="删除">删除</a>
+                                                            </td>
+                                                        </tr>
+                                                        {/loop}
+                                                        </tbody>
+                                                    </table>
+
+                                                </div>
+                                            </div>
+                                            {$pager}
+                                        </div>
+                                        <!-- END EXAMPLE TABLE PORTLET-->
+                                    </div>
+                                </div>
+                            </div>
+                            {/if}
+                            {if $fun == 'post'}
+                                <div class="tab-pane active" id="tab_1">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <!-- BEGIN PORTLET-->
+                                        <div class="portlet light form-fit ">
+                                            <div class="portlet-title">
+                                                <div class="caption">
+                                                    <i class="icon-pin font-red"></i>
+                                                    <span class="caption-subject font-red sbold uppercase">幻灯管理</span>
+                                                </div>
+                                            </div>
+                                            <div class="portlet-body form">
+                                                <!-- BEGIN FORM-->
+                                                <form action="" method="post"  class="form-horizontal form-bordered">
+                                                    <div class="form-body">
+                                                        <div class="form-group form-md-line-input">
+                                                            <label class="control-label col-md-3">标题</label>
+                                                            <div class="col-md-3">
+                                                                <input type="text" class="form-control" placeholder="" name="title" value="{$item['title']}">
+                                                                <div class="form-control-focus"> </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group form-md-line-input">
+                                                            <label class="control-label col-md-3">类别</label>
+                                                            <div class="col-md-3">
+                                                                <select name="cateid" class="form-control cate">
+                                                                    <option value="0" {if $item['cateid'] == '0'} selected{/if}>PC端-首页幻灯</option>
+                                                                    <option value="10000000" {if $item['cateid'] == '10000000'} selected{/if}>PC端-页面背景图</option>
+                                                                    {loop $category $v}
+                                                                    <option value="{$v['id']}"{if $item['cateid'] == $v['id']} selected{/if}>PC端-{$v['cname']}</option>
+                                                                    {/loop}
+                                                                    <option value="-10000000" {if $item['cateid'] == '-10000000'} selected{/if}>小程序-首页幻灯</option>
+                                                                    {loop $category $v}
+                                                                    <option value="-{$v['id']}"{if $item['cateid'] == -$v['id']} selected{/if}>小程序-{$v['cname']}</option>
+                                                                    {/loop}
+                                                                </select>
+                                                                <div class="form-control-focus"> </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group form-md-line-input">
+                                                            <label class="control-label col-md-3">第一句广告词</label>
+                                                            <div class="col-md-3">
+                                                                <input type="text" class="form-control" placeholder="" name="adwords_one" value="{$item['adwords_one']}">
+                                                                <div class="form-control-focus"> </div>
+                                                                <span class="help-block">PC端特定模板所用</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group form-md-line-input">
+                                                            <label class="control-label col-md-3">第二句广告词</label>
+                                                            <div class="col-md-3">
+                                                                <input type="text" class="form-control" placeholder="" name="adwords_two" value="{$item['adwords_two']}">
+                                                                <div class="form-control-focus"> </div>
+                                                                <span class="help-block">PC端特定模板所用</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group form-md-line-input">
+                                                            <label class="control-label col-md-3">排序</label>
+                                                            <div class="col-md-3">
+                                                                <input type="number" min="0"  class="form-control" placeholder="" name="issort" value="{$item['issort']}">
+                                                                <div class="form-control-focus"> </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group form-md-line-input">
+                                                            <label class="control-label col-md-3">是否启用</label>
+                                                            <div class="col-md-3">
+                                                                <input id="status" name="status" type="checkbox" class="make-switch"  data-size="small" data-on-color="success" data-off-color="warning" data-on-text="启用" data-off-text="禁用" {if !empty($item['status']) || !$id} checked{/if}>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group form-md-line-input">
+                                                            <label class="control-label col-md-3">缩略图</label>
+                                                            <div class="col-md-4">
+                                                                {php echo tpl_form_field_image('thumb', $item['thumb'])}
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group form-md-line-input">
+                                                            <label class="control-label col-md-3">PC端-直接链接</label>
+                                                            <div class="col-md-3">
+                                                                {php echo tpl_form_field_link('linkurl', $item['linkurl']);}
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="modal-footer">
+                                                            <input  type="submit" name='submit' class="btn green" data-dismiss="modal" value="提交" />
+                                                            <input type="hidden" name="token" value="{$_W['token']}">
+                                                        </div>
+                                                    </div>
+                                                </form>
+
+                                                <!-- END FORM-->
+                                            </div>
+                                        </div>
+                                        <!-- END PORTLET-->
+                                    </div>
+                                </div>
+                            </div>
+                            {/if}
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- BEGIN : RIBBONS -->
+
+            <!-- END : RIBBONS -->
+        </div>
+        <!-- END CONTENT BODY -->
+    </div>
+    <!-- END CONTENT -->
+</div>
+<!-- END CONTAINER -->
+
+
+{template 'footer'}
+<script>
+
+    $(document).ready(function () {
+        active($('#li_module'),$('#li_module_notice'));
+        $('.form-group').css('padding-top','0px');
+    });
+    $('.isedit').click( function () {
+        var id = $(this).attr('data-id');
+        $('#listfl').removeClass('active');
+        $('#itemfl').addClass('active');
+        $('#tab_0').removeClass('active');
+        $('#tab_1').addClass('active');
+        $('#tab_1').addClass('active');
+        $('#tab_1').addClass('active');
+
+        $('#catname').val($(this).parents("tr").children("td:eq(3)").text());
+        $('#catdisplayorder').val($(this).parents("tr").children("td:eq(1)").find("input").val());
+        $('#catisindex').bootstrapSwitch('state',$(this).parents("tr").children("td:eq(4)").find("input").bootstrapSwitch('state'));
+        $('#catisstatus').bootstrapSwitch('state',$(this).parents("tr").children("td:eq(5)").find("input").bootstrapSwitch('state'));
+        $("input[name='pic']").val($(this).parents("tr").children("td:eq(2)").find("img").attr('src'));
+        $('.img-thumbnail').attr('src',$(this).parents("tr").children("td:eq(2)").find("img").attr('src'));
+        $('#catid').val($(this).parents("tr").children("td:eq(0)").text());
+    });
+
+    $('.importcat').on('confirmed.bs.confirmation', function () {
+        $.ajax({
+            // var txt =$(this);
+            url: '{php echo $this->createWebUrl("itemsfl",array("fun"=>"importcat"))}',
+            success: function (status) {
+                if (status == '1') {
+                    //location.reload();
+                    require(['util'], function (util) {
+                        util.message("导入成功", "{php echo $_W['siteurl']}", 'success');
+                    });
+                }
+            }
+        });
+    });
+    $('.isdelete').on('confirmed.bs.confirmation', function () {
+        $.ajax({
+            // var txt =$(this);
+            url: '{php echo $this->createWebUrl("itemsfl",array("fun"=>"del"))}',
+            type: 'post',
+            data: {id: $(this).attr('data-id')},
+            success: function (status) {
+                if (status == '1') {
+                    //location.reload();
+                    require(['util'], function (util) {
+                        util.message("删除成功", "{php echo $_W['siteurl']}", 'success');
+                    });
+                }
+            }
+        });
+    });
+
+    $('.sorting').blur(function () {
+            $.ajax({
+                // var txt =$(this);
+                url:'{php echo $this->createWebUrl("itemsfl",array("fun"=>"sorting"))}',
+                type:'post',
+                data:{id:$(this).attr('data-id'),displayorder:$(this).val()},
+                success:function(status){
+                    if(status == '1'){
+                        $.bootstrapGrowl('更新成功', {
+                            ele: 'body', // which element to append to
+                            type: 'success', // (null, 'info', 'danger', 'success', 'warning')
+                            offset: {
+                                from: 'bottom',
+                                amount: 100
+                            }, // 'top', or 'bottom'
+                            align: 'right', // ('left', 'right', or 'center')
+                            width: 150, // (integer, or 'auto')
+                            delay: 2000, // Time while the message will be displayed. It's not equivalent to the *demo* timeOut!
+                            allow_dismiss: true, // If true then will display a cross to close the popup.
+                            stackup_spacing: 10 // spacing between consecutively stacked growls.
+                        });
+                    }else {
+                        $.bootstrapGrowl('未更新', {
+                            ele: 'body', // which element to append to
+                            type: 'warning', // (null, 'info', 'danger', 'success', 'warning')
+                            offset: {
+                                from: 'bottom',
+                                amount: 100
+                            }, // 'top', or 'bottom'
+                            align: 'right', // ('left', 'right', or 'center')
+                            width: 150, // (integer, or 'auto')
+                            delay: 2000, // Time while the message will be displayed. It's not equivalent to the *demo* timeOut!
+                            allow_dismiss: true, // If true then will display a cross to close the popup.
+                            stackup_spacing: 10 // spacing between consecutively stacked growls.
+                        });
+                    }
+                }
+            });
+        }
+    );
+
+    $('.isstatus').on(  'switchChange.bootstrapSwitch', function(event, state) {
+            var id = $(this).attr('data-id');
+            if (state) { // 如果状态为 on, 需要开启模态框
+                $.ajax({
+                    url:'{php echo $this->createWebUrl("itemsfl",array("fun"=>"status"))}',
+                    type:'post',
+                    data:{id:id,status:'1'},
+                    success:function(status){
+                        if(status == '1'){
+                        }
+                    }
+                });
+            } else { // 如果当前状态为off
+                $.ajax({
+                    url:'{php echo $this->createWebUrl("itemsfl",array("fun"=>"status"))}',
+                    type:'post',
+                    data:{id:id,status:'0'},
+                    success:function(status){
+                        if(status == '1'){
+
+                        }
+                    }
+                });
+            }
+        }
+    );
+
+    $('.isindex').on(  'switchChange.bootstrapSwitch', function(event, state) {
+            var label = $(this);
+            if (state) { // 如果状态为 on, 需要开启模态框
+                $.ajax({
+                    url:'{php echo $this->createWebUrl("itemsfl",array("fun"=>"isindex"))}',
+                    type:'post',
+                    data:{id:label.attr('data-id'),isindex:'1'},
+                    success:function(status){
+                        if(status == '1'){
+                        }
+                    }
+                });
+            } else { // 如果当前状态为off
+                $.ajax({
+                    url:'{php echo $this->createWebUrl("itemsfl",array("fun"=>"isindex"))}',
+                    type:'post',
+                    data:{id:label.attr('data-id'),isindex:'0'},
+                    success:function(status){
+                        if(status == '1'){
+
+                        }
+                    }
+                });
+            }
+        }
+    );
+
+
+</script>
+

@@ -1,0 +1,54 @@
+<?php
+include(FUN_ROOT.'order.fun.php');
+include(CLASS_ROOT.'sms.class.php');
+
+$product_id = isset($_GPC['product_id']) ? intval($_GPC['product_id']) : 0;
+$name = isset($_GPC['name']) ? trim($_GPC['name']) : '';
+$mobile = isset($_GPC['mobile']) ? trim($_GPC['mobile']) : '';
+$order_time = isset($_GPC['order_time']) ? trim($_GPC['order_time']) : '';
+$shop_id = isset($_GPC['shop_id']) ? intval($_GPC['shop_id']) : 0;
+$code = isset($_GPC['code']) ? trim($_GPC['code']) : '';
+$user_id = $_SESSION['user_id'];
+
+if(!preg_match('/^\S{2,}$/', $name)){
+    die(json_encode(in_error(1, '请输入正确的姓名')));
+}
+if(!preg_match('/^1(3|4|5|7|8)\d{9}$/', $mobile)){
+    die(json_encode(in_error(1, '请输入正确的电话')));
+}
+if(!preg_match('/^\d{4}-\d{1,2}-\d{1,2}$/', $order_time)){
+    die(json_encode(in_error(1, '请输入正确的日期')));
+}
+if(strtotime($order_time)<strtotime('now')){
+    die(json_encode(in_error(1, '时间已经过去了')));
+}
+if(empty($user_id)){
+    $sms = new Sms();
+    if($sms->checkCode($mobile, $code)){
+        die(json_encode(in_error(1, $sms->getErr())));
+    }
+}
+if(empty($shop_id)){
+    die(json_encode(in_error(1, '请选择体验门店')));
+}
+
+$order = array(
+    'order_sn' => order_sn($shop_id),
+    'user_id' => $user_id,
+    'product_id' => $product_id,
+    'shop_id' => $shop_id,
+    'name' => $name,
+    'mobile' => $mobile,
+    'order_time' => strtotime($order_time),
+    'add_time' => TIMESTAMP,
+    'uniacid' => $_W['uniacid']
+);
+if(pdo_insert('jkj_reser_order', $order)){
+    $oid = pdo_insertid();
+
+    order_remind($oid);
+
+    die(in_success(in_success(0)));
+}else{
+    die(in_success(in_error(1, '预约失败')));
+}

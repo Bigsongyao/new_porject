@@ -1,0 +1,424 @@
+<link href="{MODULE_URL}/template/mobile/weui/style.css" rel="stylesheet"/>
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+<div class="panel panel-default">
+	<div class="panel-heading" role="tab">
+     <a data-toggle="collapse" data-parent="#accordion" href="#collapse1" aria-expanded="true" aria-controls="collapse1">基本设置(红色是注意项)</a>
+    </div>
+    <div id="collapse1" class="panel-collapse collapse in" role="tabpanel" >
+    <div class="panel-body">
+    <input type="hidden" name="reply_id" value="{$reply['id']}" />
+        <div class="form-group">
+        	<label class="col-xs-12 col-sm-3 col-md-2 control-label f-red">单图文标题</label>
+        	<div class="col-sm-9 col-xs-12">
+         		<input type="text" value="{$reply['fm_title']}" class="form-control" name="fm_title" required>
+				<span class="help-block">用于关键字返回图文标题</span>
+        	</div>
+    </div>
+ 	<div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label f-red">单图文图片</label>
+        <div class="col-sm-9 col-xs-12">
+         	{php echo tpl_form_field_image('fm_img',$reply['fm_img']);}
+			<span class="help-block">用于关键字返回图片 最佳像素700*300</span>
+        </div>
+    </div>
+      <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label f-red">单图文描述</label>
+        <div class="col-sm-9 col-xs-12">
+ 			<textarea style="height:150px;" name="fm_desc" class="form-control" cols="60">{$reply['fm_desc']}</textarea>
+			<div class="help-block">用于关键字图文显示的描述</div>
+        </div>
+    </div>
+    
+     <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label f-red"> 活动时间</label>
+            <div class="col-sm-9 col-xs-12">
+               	{php echo tpl_form_field_daterange('htime', array('starttime'=>date('Y-m-d H:i',$reply['start_time']),'endtime'=>date('Y-m-d H:i',$reply['end_time'])),1)}
+            </div>
+        </div>
+       <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">活动规则介绍</label>
+        <div class="col-sm-9 col-xs-12">
+ 			<textarea style="height:150px;" name="g_rule_desc" id='desc' class="form-control" cols="60">{$reply['g_rule_desc']}</textarea>
+			<div class="help-block">介绍本次活动规则,奖励等</div>
+        </div>
+    </div>
+    <div class="form-group hidden">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label f-red">总次数限制</label>
+        <div class="col-sm-9 col-xs-12">
+  		
+  			<input type="number" value="{$reply['max_num']}" class="form-control" name="max_num" min='1' pattern="^\d+$" required>
+			<div class="help-block">最多能玩次数最小为1,默认100</div>
+        </div>
+    </div>      
+    <div class="form-group hidden">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label f-red">每天限制规则</label>
+        <div class="col-sm-9 col-xs-12">
+  		
+  			<input type="number" value="{$reply['day_num']}" class="form-control" name="day_num" min='1' pattern="^\d+$" required>
+			<div class="help-block">每天最多玩不能超过总次数,最小为1次</div>
+        </div>
+    </div>  
+          <div class="form-group">
+          <label class="col-xs-12 col-sm-3 col-md-2 control-label">活动状态</label>
+          <div class="col-sm-9 col-xs-12">
+             <label><input type="radio" value="0" name="isok" {if $reply['isok'] == 0 }checked{/if}>未开始/结束</label>
+             <label><input type="radio" value="1" name="isok" {if $reply['isok'] == 1 }checked{/if}>进行中</label>
+             <label><input type="radio" value="2" name="isok" {if $reply['isok'] == 2 }checked{/if}>暂停中</label>
+             <div class="help-block">第1种用于活动提前结束,第2种正常状态,第3种暂停,用于调试或维护</div>
+          </div>
+        </div> 
+         <div class="form-group" >
+          <label class="col-xs-12 col-sm-3 col-md-2 control-label">注册</label>
+          <div class="col-sm-9 col-xs-12">
+             <label><input type="radio" value="0" name="g_isreg" {if $reply['g_isreg'] == 0 }checked{/if}>否</label>
+             <label><input type="radio" value="1" name="g_isreg" {if $reply['g_isreg'] == 1 }checked{/if}>是</label>
+             <div class="help-block">游戏前强制注册填写选是,自己自愿填写选择否</div>
+          </div>
+        </div>  
+         <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label f-red">虚假参与人数</label>
+        <div class="col-sm-9 col-xs-12">
+  		
+  			<input type="number" value="{$reply['g_play_num']}"  name="g_play_num" class="form-control" min='0' pattern="^\d+$" required>
+			<div class="help-block">设置虚假参数人数,0或不填写表示使用真实统计的参与人数</div>
+        </div>
+    </div>  
+    
+   <div class="form-group" >
+          <label class="col-xs-12 col-sm-3 col-md-2 control-label">是否显示地址</label>
+          <div class="col-sm-9 col-xs-12">
+             <label><input type="radio" value="0" name="g_address" {if $reply['g_address'] == 0 }checked{/if}>否</label>
+             <label><input type="radio" value="1" name="g_address" {if $reply['g_address'] == 1 }checked{/if}>是</label>
+             <div class="help-block">选择地址是否填写</div>
+          </div>
+        </div> 
+    
+         
+</div>
+</div>
+</div>
+
+
+
+<!--个性化---->
+<div class="panel panel-default">
+	<div class="panel-heading" role="tab">
+     <a data-toggle="collapse" data-parent="#accordion" href="#collapse3" aria-expanded="true" aria-controls="collapse3">游戏个性化</a>
+    </div>
+    <div id="collapse3" class="panel-collapse collapse " role="tabpanel" >
+    <div class="panel-body">
+
+     <div class="form-group hidden">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label f-red">游戏时间</label>
+        <div class="col-sm-9 col-xs-12">
+  		
+  			<input type="number" value="{$reply['g_time']}" class="form-control" name="g_time" min='1' pattern="^\d+$"  required>
+			<div class="help-block">时间必须大于0,单位秒,默认30</div>
+        </div>
+    </div> 
+      <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">游戏标题</label>
+        <div class="col-sm-9 col-xs-12">
+  		
+  			<input type="text" value="{$reply['g_title']}" class="form-control" name="g_title"  required>
+			<div class="help-block">游戏主页自定义标题</div>
+        </div>
+    </div>    
+          <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">版权设置</label>
+        <div class="col-sm-9 col-xs-12">
+  		
+  			<input type="text" value="{$reply['g_copyright']}" class="form-control" name="g_copyright"   required>
+			<div class="help-block">版权设置</div>
+        </div>
+    </div>
+ 	<div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">规则页图</label>
+        <div class="col-sm-9 col-xs-12">
+         	{php echo tpl_form_field_image('g_rule_img',$reply['g_rule_img']);}
+			<span class="help-block">用于规则页顶部图720X400最佳</span>
+        </div>
+    </div> 
+  	<div class="form-group hidden">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">游戏背景图</label>
+        <div class="col-sm-9 col-xs-12">
+         	{php echo tpl_form_field_image('g_index_img',$reply['g_index_img']);}
+			<span class="help-block">用于规则页顶部图640X960最佳</span>
+        </div>
+    </div> 
+         <div class="form-group">
+        	<label class="col-xs-12 col-sm-3 col-md-2 control-label">排行榜和规则背景色</label>
+        	<div class="col-sm-9 col-xs-12">
+         		{php echo tpl_form_field_color('g_bg_color',$reply['g_bg_color']);}
+				<span class="help-block"></span>
+        	</div>
+    </div>
+         <div class="form-group hidden">
+        	<label class="col-xs-12 col-sm-3 col-md-2 control-label">背景音乐</label>
+        	<div class="col-sm-9 col-xs-12">
+         {php echo tpl_form_field_audio('g_music',$reply['g_music']);}
+         <div class="help-block">设置音乐</div>
+        	</div>
+    </div>       
+     	<div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">参与次数图</label>
+        <div class="col-sm-9 col-xs-12">
+         	{php echo tpl_form_field_image('t1',$reply['g_res']['t1']);}
+			<span class="help-block">347X140 png</span>
+        </div>
+    </div>  
+
+
+     	<div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">活动说明图</label>
+        <div class="col-sm-9 col-xs-12">
+         	{php echo tpl_form_field_image('t2',$reply['g_res']['t2']);}
+			<span class="help-block">347X140 png</span>
+        </div>
+    </div>  
+      	<div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">活动奖品图</label>
+        <div class="col-sm-9 col-xs-12">
+         	{php echo tpl_form_field_image('t3',$reply['g_res']['t3']);}
+			<span class="help-block">347X140 png</span>
+        </div>
+    </div>         
+     	<div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">我的奖品图</label>
+        <div class="col-sm-9 col-xs-12">
+         	{php echo tpl_form_field_image('t4',$reply['g_res']['t4']);}
+			<span class="help-block">347X140 png</span>
+        </div>
+    </div>  
+     	<div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">中奖记录图</label>
+        <div class="col-sm-9 col-xs-12">
+         	{php echo tpl_form_field_image('t5',$reply['g_res']['t5']);}
+			<span class="help-block">347X140 png</span>
+        </div>
+    </div>  
+     	<div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">游戏摇一摇拼接图</label>
+        <div class="col-sm-9 col-xs-12">
+         	{php echo tpl_form_field_image('t6',$reply['g_res']['t6']);}
+			<span class="help-block">74x58 png</span>
+        </div>
+    </div>  
+     	<div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">游戏摇一摇拼接图</label>
+        <div class="col-sm-9 col-xs-12">
+         	{php echo tpl_form_field_image('t7',$reply['g_res']['t7']);}
+			<span class="help-block">47x109 png</span>
+        </div>
+    </div> 
+     	<div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">游戏摇一摇拼接图</label>
+        <div class="col-sm-9 col-xs-12">
+         	{php echo tpl_form_field_image('t8',$reply['g_res']['t8']);}
+			<span class="help-block">62x46png</span>
+        </div>
+    </div> 
+     	<div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">游戏摇一摇拼接图</label>
+        <div class="col-sm-9 col-xs-12">
+         	{php echo tpl_form_field_image('t9',$reply['g_res']['t9']);}
+			<span class="help-block">60x31 png</span>
+        </div>
+    </div> 
+     	<div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">游戏摇一摇拼接图</label>
+        <div class="col-sm-9 col-xs-12">
+         	{php echo tpl_form_field_image('t10',$reply['g_res']['t10']);}
+			<span class="help-block">129x137png</span>
+        </div>
+    </div> 
+     	<div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">游戏摇一摇拼接图</label>
+        <div class="col-sm-9 col-xs-12">
+         	{php echo tpl_form_field_image('t11',$reply['g_res']['t11']);}
+			<span class="help-block">109x118 png</span>
+        </div>
+    </div> 
+     	<div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">游戏摇一摇拼接图</label>
+        <div class="col-sm-9 col-xs-12">
+         	{php echo tpl_form_field_image('t12',$reply['g_res']['t12']);}
+			<span class="help-block">136x143 png</span>
+        </div>
+    </div> 
+     	<div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">游戏摇一摇拼接图</label>
+        <div class="col-sm-9 col-xs-12">
+         	{php echo tpl_form_field_image('t13',$reply['g_res']['t13']);}
+			<span class="help-block">448x448 png</span>
+        </div>
+    </div> 
+     	<div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">游戏摇一摇拼接图</label>
+        <div class="col-sm-9 col-xs-12">
+         	{php echo tpl_form_field_image('t14',$reply['g_res']['t14']);}
+			<span class="help-block">388x389 png</span>
+        </div>
+    </div> 
+     	<div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">游戏摇一摇拼接图</label>
+        <div class="col-sm-9 col-xs-12">
+         	{php echo tpl_form_field_image('t15',$reply['g_res']['t15']);}
+			<span class="help-block">193x342 png</span>
+        </div>
+    </div> 
+
+     	<div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">游戏摇一摇拼接图</label>
+        <div class="col-sm-9 col-xs-12">
+         	{php echo tpl_form_field_image('t16',$reply['g_res']['t16']);}
+			<span class="help-block">443x217 png</span>
+        </div>
+    </div> 
+
+
+</div>
+</div>
+</div>
+
+<!--中奖信息---->
+<div class="panel panel-default">
+	<div class="panel-heading" role="tab">
+     <a data-toggle="collapse" data-parent="#accordion" href="#collapse4" aria-expanded="true" aria-controls="collapse4">中奖信息设置</a>
+    </div>
+    <div id="collapse4" class="panel-collapse collapse " role="tabpanel" >
+    <div class="panel-body">
+     <div class="form-group hidden" >
+          <label class="col-xs-12 col-sm-3 col-md-2 control-label">是否开启抽奖</label>
+          <div class="col-sm-9 col-xs-12">
+             <label><input type="radio" value="0" name="is_prize" {if $reply['is_prize'] == 0 }checked{/if}>否</label>
+             <label><input type="radio" value="1" name="is_prize" {if $reply['is_prize'] == 1 }checked{/if}>是</label>
+             <div class="help-block hidden">开启抽奖可以使用抽奖,本抽奖并不是使用积分兑换形式抽奖,而是达到一定积分数以后可以参与</div>
+          </div>
+        </div>  
+    <div class="form-group  hidden">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label f-red">抽奖最低积分</label>
+        <div class="col-sm-9 col-xs-12">
+  		
+  			<input type="number" value="{$reply['prize_fen']}" class="form-control" name="prize_fen" min='1' pattern="^\d+$"  >
+			<div class="help-block">抽奖所需最低积分,只有达到积分数可以抽奖</div>
+        </div>
+    </div>        
+ 
+       <div class="form-group">
+        	<label class="col-xs-12 col-sm-3 col-md-2 control-label f-red">兑奖密码</label>
+        	<div class="col-sm-9 col-xs-12">
+         		<input type="text" value="{$reply['prize_password']}" class="form-control" name="prize_password" >
+				<span class="help-block">兑奖密码,活动结束可公布出去</span>
+        	</div>
+    </div>  
+     <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label f-red">最多抽奖次数</label>
+        <div class="col-sm-9 col-xs-12">
+  		
+  			<input type="number" value="{$reply['prize_max_num']}" class="form-control" name="prize_max_num" min='1' pattern="^\d+$"  >
+			<div class="help-block">至少有一次</div>
+        </div>
+    </div>          
+     <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label f-red">每天最多抽奖次数</label>
+        <div class="col-sm-9 col-xs-12">
+  		
+  			<input type="number" value="{$reply['prize_day_num']}" class="form-control" name="prize_day_num" min='1' pattern="^\d+$"  >
+			<div class="help-block">至少一次,但是不能大于最多抽奖次数</div>
+        </div>
+    </div>  
+ 
+ 
+      <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label f-red">最多中奖次数</label>
+        <div class="col-sm-9 col-xs-12">
+  		
+  			<input type="number" value="{$reply['is_chou']}" class="form-control" name="is_chou" min='0' pattern="^\d+$"  >
+			<div class="help-block">默认0,表示中奖次数不限制,大于0表示最多中奖次数</div>
+        </div>
+    </div> 
+            
+</div>
+</div>
+</div>
+
+
+<!--分享关注---->
+<div class="panel panel-default">
+	<div class="panel-heading" role="tab">
+     <a data-toggle="collapse" data-parent="#accordion" href="#collapse2" aria-expanded="true" aria-controls="collapse2">分享关注设置</a>
+    </div>
+    <div id="collapse2" class="panel-collapse collapse " role="tabpanel" >
+    <div class="panel-body">
+ 	<div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">分享小图标</label>
+        <div class="col-sm-9 col-xs-12">
+         	{php echo tpl_form_field_image('share_img',$reply['share_img']);}
+			<span class="help-block">分享时候小图标最佳100-200的正方形图片</span>
+        </div>
+    </div>  
+       <div class="form-group">
+        	<label class="col-xs-12 col-sm-3 col-md-2 control-label">分享标题</label>
+        	<div class="col-sm-9 col-xs-12">
+         		<input type="text" value="{$reply['share_title']}" class="form-control" name="share_title" required>
+				<span class="help-block">分享标题,未玩游戏时候的</span>
+        	</div>
+    </div>  
+           <div class="form-group hidden">
+        	<label class="col-xs-12 col-sm-3 col-md-2 control-label">游戏结束分享标题</label>
+        	<div class="col-sm-9 col-xs-12">
+         		<input type="text" value="{$reply['share_game_title']}" class="form-control" name="share_game_title" required>
+				<span class="help-block">带分数分享,使用"[n]"表示分数</span>
+        	</div>
+    </div>     
+         <div class="form-group">
+        	<label class="col-xs-12 col-sm-3 col-md-2 control-label">分享描述</label>
+        	<div class="col-sm-9 col-xs-12">
+         		<input type="text" value="{$reply['share_desc']}" class="form-control" name="share_desc" required>
+				<span class="help-block">分享描述</span>
+        	</div>
+    </div> 
+             <div class="form-group hidden">
+        	<label class="col-xs-12 col-sm-3 col-md-2 control-label">游戏结束分享描述</label>
+        	<div class="col-sm-9 col-xs-12">
+         		<input type="text" value="{$reply['share_game_desc']}" class="form-control" name="share_game_desc" required>
+				<span class="help-block">带分数分享,使用"[n]"表示分数</span>
+        	</div>
+    </div> 
+         <div class="form-group">
+        	<label class="col-xs-12 col-sm-3 col-md-2 control-label f-red">引导关注二维码</label>
+        	<div class="col-sm-9 col-xs-12">
+         		
+         		{php echo tpl_form_field_image('share_url',$reply['share_url']);}
+				<span class="help-block"></span>
+        	</div>
+    </div> 
+      <div class="form-group hidden">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">朋友圈分享增加次数</label>
+        <div class="col-sm-9 col-xs-12">
+  		
+  			<input type="number" value="{$reply['share_game_num']}" class="form-control" name="share_game_num" min='1' pattern="^\d+$"  required>
+			<div class="help-block">分享到朋友圈增加游戏机会次数,每天分享多次分享无效,只支持朋友圈的分享,默认1次</div>
+        </div>
+    </div>  
+       <div class="form-group hidden">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">朋友圈分享增加抽奖次数</label>
+        <div class="col-sm-9 col-xs-12">
+  		
+  			<input type="number" value="{$reply['share_prize_num']}" class="form-control" name="share_prize_num" min='1' pattern="^\d+$"   required>
+			<div class="help-block">分享到朋友圈增加抽奖次数,每天分享多次分享无效,只支持朋友圈的分享,默认1次</div>
+        </div>
+    </div>    
+       
+</div>
+</div>
+</div>
+
+<script type="text/javascript">
+    require(['util'],function(util){
+        util.editor($("#desc")[0]);
+    });
+
+</script>
+</div>

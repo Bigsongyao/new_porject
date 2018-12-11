@@ -1,0 +1,38 @@
+<?php
+include(FUN_ROOT.'order.fun.php');
+include(FUN_ROOT.'product.fun.php');
+
+if(check_role('shoper')){
+    die(json_encode(in_error(1, '无权限操作')));
+}
+
+$user_id = $_SESSION['user_id'];
+$oid = isset($_GPC['oid']) ? intval($_GPC['oid']) : 0;
+$shop = pdo_fetch("SELECT shop_id,province,city FROM ".tablename('jkj_shops')." WHERE shoper_id=:user_id AND uniacid=:uniacid", array(':user_id' => $user_id, ':uniacid' => $_W['uniacid']));
+
+$order = pdo_fetch("SELECT * FROM ".tablename('jkj_reser_order')." WHERE shop_id=:shop_id AND uniacid=:uniacid AND oid=:oid", array(':shop_id' => $shop['shop_id'], ':uniacid' => $_W['uniacid'], ':oid' => $oid));
+if(!$order){
+    die(json_encode(in_error(1, '订单不存在')));
+}
+
+$quick_order = array(
+    'order_sn' => order_sn(),
+    'user_id' => $order['user_id'],
+    'province' => $shop['province'],
+    'city' => $shop['city'],
+    'username' => $order['name'],
+    'mobile' => $order['mobile'],
+    'source_type' => 'reserOrder',
+    'source_id' => $order['shop_id'],
+	'order_status' => 0,
+    'add_time' => TIMESTAMP,
+    'uniacid' => $_W['uniacid']
+);
+
+pdo_insert('jkj_order', $order);
+$order_id = pdo_insertid();
+order_record($order_id, $update['order_status'], true);
+
+pdo_update('jkj_reser_order', array('order_id' => $order_id), array('oid' => $oid));
+
+die(json_encode(in_success(0)));

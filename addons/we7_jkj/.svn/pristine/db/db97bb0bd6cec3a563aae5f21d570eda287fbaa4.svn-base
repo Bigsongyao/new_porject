@@ -1,0 +1,77 @@
+<?php
+$comment_tags = array(
+	'1' => '评论1',
+	'2' => '评论2',
+	'3' => '评论3',
+	'4' => '评论4',
+	'5' => '评论5',
+);
+
+$user_id = $_SESSION['user_id'];
+$oid = isset($_GPC['oid']) ? $_GPC['oid'] : 0;
+$content = trim($_GPC['content']);
+$star = isset($_GPC['star']) ? intval($_GPC['star']) : 0;
+$tag_str = preg_match('/^[\d\,]+$/',$_GPC['tags']) ? $_GPC['tags'] : '';
+$tags = empty($tag_str) ? array() : explode(',', $tag_str);
+
+$order = pdo_fetch("SELECT oid,order_status,product_id FROM ".tablename('jkj_reser_order')." WHERE user_id=:user_id AND uniacid=:uniacid AND oid=:oid", array(
+	':user_id' => $user_id,
+	':uniacid' => $_W['uniacid'],
+	':oid' => $oid
+));
+if(!$order){
+    die(json_encode(in_error(1, '订单不存在')));
+}
+
+$is_comment = pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename('jkj_comments')." WHERE user_id=:user_id AND uniacid=:uniacid AND order_id=:oid", array(
+	':user_id' => $user_id,
+	':uniacid' => $_W['uniacid'],
+	':oid' => $oid,
+));
+if($is_comment){
+	die(json_encode(in_error(1, '订单已评价')));
+}
+
+if($order['product_id']>0){
+	foreach($tags as $tag_id){
+		if(isset($comment_tags[$tag_id])){
+			$comment_tag[] = $comment_tags[$tag_id];
+
+			$product_tag = pdo_fetch('SELECT id,num FROM '.tablename('jkj_product_tag').' WHERE product_id=:product_id AND tag_id=:tag_id AND uniacid=:uniacid AND comment_type=0
+			、',array(
+				':product_id' => $order['product_id'],
+				':tag_id' => $tag_id,
+				':uniacid' => $_W['uniacid'],
+			));
+
+			if($product_tag){
+				pdo_update('jkj_product_tag', array('num' => $product_tag['num']+1), array('id' => $product_tag['id']));
+			}else{
+				pdo_insert('jkj_product_tag', array(
+					'product_id' => $order['product_id'],
+					'tag_id' => $tag_id,
+					'summary' => $comment_tags[$tag_id],
+					'num' => 1,
+					'uniacid' => $_W['uniacid'],
+				));
+			}
+		}
+	}
+}
+
+$data = array(
+	'product_id' => $order['product_id'],
+	'user_id' => $user_id,
+	'order_id' => $oid,
+	'content' => $content,
+	'star' => $star,
+	'tag' => isset($comment_tag) ? implode(',', $comment_tag) : '',
+	'add_time' => TIMESTAMP,
+	'comment_type' => 0,
+	'uniacid' => $_W['uniacid'],
+);
+pdo_insert('jkj_comments', $data);
+
+
+die(json_encode(in_success(0)));
+

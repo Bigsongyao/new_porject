@@ -1,0 +1,10 @@
+{template 'common/header'}
+<style>
+    nav#leftmenu{
+        width: 25%;
+        display: inline-block;
+    }
+    nav#leftmenu a{
+        display: block;
+    }
+</style>

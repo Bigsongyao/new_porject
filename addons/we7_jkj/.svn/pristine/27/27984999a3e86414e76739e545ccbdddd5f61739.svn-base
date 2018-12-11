@@ -1,0 +1,26 @@
+<?php
+include(FUN_ROOT.'user.fun.php');
+include(FUN_ROOT.'product.fun.php');
+
+$user_id = $_SESSION['user_id'];
+$oid = isset($_GPC['oid']) ? intval($_GPC['oid']) : 0;
+
+$par[':oid'] = $oid;
+$par[':uniacid'] = $_W['uniacid'];
+$par[':user_id'] = $user_id;
+
+$sql = "SELECT oid,order_sn,shop_id,name,order_time FROM ".tablename('jkj_reser_order')." WHERE oid=:oid AND user_id=:user_id AND uniacid=:uniacid";
+$result = pdo_fetch($sql, $par);
+if(!$result){
+    die(in_error(1, '订单不存在'));
+}
+
+$shop_info = get_shop_info($result['shop_id']);
+$user_info = get_user_info($user_id);
+
+$result['username'] = $user_info['username'];
+$result['headimg'] = tomedia($user_info['headimg']);
+$result['shop_name'] = $shop_info['shop_name'];
+
+die(in_success(0, $result));
+

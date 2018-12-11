@@ -1,0 +1,148 @@
+{if $article_sys['article_temp']==0}
+<style>
+.fui-card .fui-card-content {
+    padding: 0 .2rem .2rem .2rem;
+    line-height: 1rem;
+    font-size: 0.7rem;
+    color: #445;
+    height: 5rem;
+}
+.fui-list{padding:0}
+.fui-card {
+    margin: 0.2rem;
+    }
+  .fui-card-content{height:50px;}
+  .fui-card .fui-card-footer {
+    padding: .3rem .5rem;}
+  .topimg{font-weight:bold;font-size: 1rem;line-height:2;background:#fff;padding:0 10px;}
+  .topimg span{font-weight:normal;font-size: 0.8rem;}
+  .list-number{width:50%;float:left}
+  a{color: #666;}
+  .fui-card .fui-card-image {
+    padding: .3rem .3rem .3rem .3rem;
+    height: 8rem;
+    overflow: hidden;
+}
+</style>
+	{loop $articles $article}
+		<div class="list-number">
+			<a class="fui-list " href="{php echo mobileUrl('article',array('aid'=>$article['id']))}">
+        <div class="fui-card">
+				{if !empty($article['resp_img'])}
+					<div class="fui-card-image">
+						<img class="round" src="{php echo tomedia($article['resp_img'])}"/>
+					</div>
+				{/if}
+				<div class="fui-list-inner">
+					<div class="fui-card-content">{$article['resp_desc']}</div>
+					<div class="fui-card-footer">
+							<span class="text"><i class="icon icon-browse"></i> <?php echo $article['article_readnum_v'] + $article['article_readnum'] ?></span>
+							<span class="pull-right"><i class="icon icon-like"></i> <?php echo $article['article_likenum_v'] + $article['article_likenum'] ?></span>
+          </div>
+				</div>
+				</div>
+			</a>
+		</div>
+	{/loop}
+
+{elseif $article_sys['article_temp']==1}
+<style>
+.fui-card .fui-card-content {
+    padding: 0 .2rem .2rem .2rem;
+    line-height: 1rem;
+    font-size: 0.7rem;
+    color: #445;
+    height: 5rem;
+}
+.fui-card {
+    margin: 0.2rem;
+    }
+  .fui-card-content{height:50px;}
+  .fui-card .fui-card-footer {
+    padding: .3rem .5rem;}
+  .topimg{font-weight:bold;font-size: 1rem;line-height:2;background:#fff;padding:0 10px;}
+  .topimg span{font-weight:normal;font-size: 0.8rem;}
+  .list-number{width:50%;float:left}
+  .fui-card .fui-card-image {
+    padding: .3rem .3rem .3rem .3rem;
+    height: 8rem;
+    overflow: hidden;
+}
+</style>
+  <div class="topimg">
+			达人资讯 / <span>達人情報</span>
+		</div>
+	{loop $articles $k  $v}
+		<div class="list-number">
+			{if count($v['articles'])==1}
+				<a href="{php echo mobileUrl('article',array('aid'=>$v['articles'][0]['id']))}" class="">
+					<div class="fui-card">
+						{if !empty($v['articles'][0]['resp_img'])}
+							<div class="fui-card-image">
+								<img src="{php echo tomedia($v['articles'][0]['resp_img'])}">
+							</div>
+						{/if}
+						<div class="fui-card-content">{$v['articles'][0]['resp_desc']}</div>
+            <!-- <div class="fui-card-title">
+							<span class="title">{$v['articles'][0]['article_title']}</span>
+							<span class="subtitle">{$k}</span>
+						</div> -->
+						<div class="fui-card-footer">
+							<span class="text"><i class="icon icon-browse"></i> <?php echo $v['articles'][0]['article_readnum_v'] + $v['articles'][0]['article_readnum'] ?></span>
+							<span class="pull-right"><i class="icon icon-like"></i> <?php echo $v['articles'][0]['article_likenum_v'] + $v['articles'][0]['article_likenum'] ?></span>
+						</div>
+					</div>
+				</a>
+			{else}
+				<div class="fui-card fui-card-list">
+					{loop $v['articles'] $index $vv}
+						{if $index==0}
+							<a href="{php echo mobileUrl('article',array('aid'=>$vv['id']))}" class="">
+								<div class="fui-card-info">
+									<div class="image">
+										<img src="{php echo tomedia($vv['resp_img'])}" />
+									</div>
+									<div class="text">
+										<span class="subtitle">{$k}</span>
+									</div> 
+								</div>
+								<div class="fui-card-first">
+									<div class="image">
+										<img src="{php echo tomedia($vv['resp_img'])}" />
+										<div class="text">{$vv['article_title']}</div>
+									</div>
+								</div>
+							</a>
+						{else}
+							<a href="{php echo mobileUrl('article',array('aid'=>$vv['id']))}" class="">
+								<div class="fui-card-item">
+									<img src="{php echo tomedia($vv['resp_img'])}" />
+									<div class="text">{$vv['article_title']}</div>
+								</div>
+							</a>
+						{/if}
+					{/loop}
+				 </div>
+			{/if}
+		</div>
+	{/loop}
+
+{elseif $article_sys['article_temp']==2}
+	{loop $articles $article}
+		<div class="list-number">
+				<a class="fui-list " href="{php echo mobileUrl('article',array('aid'=>$article['id']))}">
+					<div class="fui-list-media">
+						<img class="round" src="{php echo tomedia($article['resp_img'])}">
+					</div>
+					<div class="fui-list-inner">
+						<div class="title">{$article['article_title']}</div>
+						<div class="text">{$article['resp_desc']}</div>
+					</div>
+					<div class="fui-list-angle">
+						<div class="angle"></div>
+					</div>
+				</a>
+		</div>
+	{/loop}
+{/if}
+

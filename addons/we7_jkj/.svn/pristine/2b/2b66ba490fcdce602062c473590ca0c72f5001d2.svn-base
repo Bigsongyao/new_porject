@@ -1,0 +1,99 @@
+<!-- BEGIN SIDEBAR -->
+<div class="page-sidebar-wrapper "  data-auto-scroll="true" >
+    <!-- BEGIN SIDEBAR -->
+    <!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
+    <!-- DOC: Change data-auto-speed="200" to adjust the sub menu slide up/down speed -->
+    <div class="page-sidebar navbar-collapse collapse" data-auto-speed="200" >
+        <!-- BEGIN SIDEBAR MENU -->
+        <!-- DOC: Apply "page-sidebar-menu-light" class right after "page-sidebar-menu" to enable light sidebar menu style(without borders) -->
+        <!-- DOC: Apply "page-sidebar-menu-hover-submenu" class right after "page-sidebar-menu" to enable hoverable(hover vs accordion) sub menu mode -->
+        <!-- DOC: Apply "page-sidebar-menu-closed" class right after "page-sidebar-menu" to collapse("page-sidebar-closed" class must be applied to the body element) the sidebar sub menu mode -->
+        <!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
+        <!-- DOC: Set data-keep-expand="true" to keep the submenues expanded -->
+        <!-- DOC: Set data-auto-speed="200" to adjust the sub menu slide up/down speed -->
+        <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-fixed page-sidebar-menu-closed" data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200" style="padding-top: 20px">
+            <!-- DOC: To remove the sidebar toggler from the sidebar you just need to completely remove the below "sidebar-toggler-wrapper" LI element -->
+            <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
+            <li class="sidebar-toggler-wrapper hide">
+                <div class="sidebar-toggler">
+                    <span></span>
+                </div>
+            </li>
+            <!-- END SIDEBAR TOGGLER BUTTON -->
+            <li id="li_xt" class="nav-item start ">
+                <a href="javascript:;" class="nav-link nav-toggle">
+                    <i class="icon-settings"></i>
+                    <span class="title">系统设置</span>
+                    <span class="arrow"></span>
+                </a>
+                <ul class="sub-menu">
+                    <li id="li_xt_xtsy" class="nav-item start ">
+                        <a href="{php echo url('home/welcome/ext')}m=gymy_cms" class="nav-link ">
+                            <i class="icon-bar-chart"></i>
+                            <span class="title">后台首页</span>
+                        </a>
+                    </li>
+                    <li id="li_xt_xtcs" class="nav-item start ">
+                        <a href="{php echo $this->createWebUrl('set')}" class="nav-link ">
+                            <i class="icon-bar-chart"></i>
+                            <span class="title">系统参数</span>
+                        </a>
+                    </li>
+                   <!-- <li class="nav-item start ">
+                        <a href="{php echo url('module/permission')}m=gymy_cms&version_id=0" target="_blank" class="nav-link ">
+                            <i class="icon-bulb"></i>
+                            <span class="title">权限设置</span>
+                            <span class="badge badge-success"></span>
+                        </a>
+                    </li>-->
+                </ul>
+            </li>
+            <li class="heading">
+                <h3 class="uppercase">功能菜单</h3>
+            </li>
+            <li id="li_module" class="nav-item  ">
+                <a href="javascript:;" class="nav-link nav-toggle">
+                    <i class="icon-puzzle"></i>
+                    <span class="title">网站功能</span>
+                    <span class="arrow"></span>
+                </a>
+                <ul class="sub-menu">
+                    <li id="li_module_order" class="nav-item  ">
+                        <a href="{php echo $this->createWebUrl('order')}" class="nav-link ">
+                            <span class="title">订单管理</span>
+                        </a>
+                    </li>
+                    <li id="li_module_products" class="nav-item  ">
+                        <a href="{php echo $this->createWebUrl('products')}" class="nav-link ">
+                            <span class="title">产品管理</span>
+                        </a>
+                    </li>
+					<li id="li_module_products" class="nav-item  ">
+                        <a href="{php echo $this->createWebUrl('shops')}" class="nav-link ">
+                            <span class="title">店铺管理</span>
+                        </a>
+                    </li>
+                    <li id="li_module_handy_attribute" class="nav-item  ">
+                        <a href="{php echo $this->createWebUrl('attribute')}" class="nav-link ">
+                            <span class="title">属性管理</span>
+                        </a>
+                    </li>
+                    <li id="li_module_category" class="nav-item  ">
+                        <a href="{php echo $this->createWebUrl('category')}" class="nav-link ">
+                            <span class="title">分类管理</span>
+                        </a>
+                    </li>
+                    <li id="li_module_role" class="nav-item  ">
+                        <a href="{php echo $this->createWebUrl('roles')}" class="nav-link ">
+                            <span class="title">角色管理</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <!-- END SIDEBAR MENU -->
+        <!-- END SIDEBAR MENU -->
+    </div>
+    <!-- END SIDEBAR -->
+</div>
+<!-- END SIDEBAR -->

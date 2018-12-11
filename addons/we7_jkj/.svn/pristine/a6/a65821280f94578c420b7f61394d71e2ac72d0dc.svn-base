@@ -1,0 +1,14 @@
+<?php
+include(FUN_ROOT.'user.fun.php');
+include(CLASS_ROOT.'user.class.php');
+
+$user_id = $_SESSION['user_id'];
+
+$user_info = user_info($user_id);
+if(!$user_info){
+    die(json_encode(in_error(1, '用户不存在')));
+}
+
+$user = new User();
+
+die(json_encode(in_success(0,$user_info)));

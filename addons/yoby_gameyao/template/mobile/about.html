@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html style="height:100%;">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<title>{$row['g_title']}</title>
+<link href="{php echo $this->yobyurl}js/bstyle.css" rel="stylesheet" type="text/css" />
+<link href="{php echo $this->yobyurl}js/styleok.css" rel="stylesheet" type="text/css" />
+<script src="{php echo $this->yobyurl}js/jquery-1.js" type="text/javascript"></script>
+<style>
+.prize3 ul { overflow: hidden; margin: 0 10px; color: #FFF }
+.prize3 ul li { display: inline-block; text-align: center; width: 30%; margin-right: 2%; margin-bottom: 10px; }
+.prize3 ul li:nth-child(3n) { margin-right: 0; }
+.prize3 ul li .hdjptp { padding: 5px; background-color: rgba(0, 0, 0, 0.1); border-radius: 6px; }
+.prize3 ul li .jptu { position: relative; margin-bottom: 2px; border-radius: 5px; overflow: hidden; background-color: #FFF }
+.prize3 ul li .jpgs { position: absolute; bottom: 0; background-color: rgba(0, 0, 0, 0.3); color: #FFF; padding: 2px 0; width: 100%; font-size: 12px; text-align: center }
+.prize3 ul li .jpdj { font-size: 14px; color: #ffe400; }
+.prize3 ul li .jpmc { font-size: 12px; }
+  body {
+background: {$row['g_bg_color']} !important;
+}
+.content .text {
+    color: #fff6a7;
+    font-size: 14px;
+    padding: 2% 3% 3% 6%;
+}
+.content .prize {
+    overflow: hidden;
+    padding: 10px 15px 5px 3px;
+}
+.content .prize ul {
+    width: 100%;
+}
+.content .prize ul li {
+    background-color: rgba(0, 0, 0, 0.16);
+    border-radius: 10px;
+    margin: 2% 0 2% 2%;
+    padding: 2%;
+    text-align: center;
+}
+.content .prize ul li img {
+    width: 100%;
+}
+.content .prize ul li p {
+    color: #fff6a7;
+    overflow: hidden;
+}
+.content .list ul li {
+    font-size: 14px;
+    margin: 3% 0;
+   
+    text-align: center;
+}
+
+.promptbox .box h1.content .list ul li .phone {
+    float: left;
+    width: 15%;
+}
+.content .list ul li .award {
+    float: left;
+}
+.content .list ul li .button {
+    float: right;
+    padding: 0 10px;
+    position: relative;
+}
+.update { cursor: pointer; border-radius: 100%; background: rgba(255, 255, 255, 0.15); width: 18px; height: 18px; padding: 8px; position: absolute; left: 10px; top: 10px; text-align: center; }
+.update img { width: 18px; height: 18px; }
+
+
+.tx3 { text-align: center; font-size: 16px; line-height: 16px; color: #fff;  width:150px; padding: 8px; margin: 20px auto; background-color: rgba(255, 255, 255, 0.1); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); }
+.tx3 a{color: #fff; outline: medium none;text-decoration: none;}
+</style>
+</head>
+<body >
+ <?php
+    $wx['url'] =$_W['siteroot'].'app/index.php?i='.$_W['uniacid'].'&c=entry&rid='.$rid.'&do=index&m=yoby_gameyao&wxref=mp.weixin.qq.com';
+
+$wxurl = $wx['url'];
+    ?>
+<img src="{php echo tomedia($row['share_img'])}"  style="display:none" />
+<input id="wx-share-title" type="hidden" value="{$row["share_title"]}" />
+<input id="wx-share-img" type="hidden" value="{php echo tomedia($row['share_img'])}" />
+<input id="wx-share-desc" type="hidden" value="{$row["share_desc"]}" />
+<input id="wx-share-link" type="hidden" value="{$wxurl}" />
+<input id="sharebackurl" type="hidden" value="" />
+<script src="//res.wx.qq.com/open/js/jweixin-1.0.0.js" type="text/javascript"></script>
+ 	<?php
+$wx = $_W['account']['jssdkconfig'];
+?>
+<script type="text/javascript">
+    var appIdstr = "{$wx['appId']}";
+    var timestampstr = "{$wx['timestamp']}";
+    var nonceStrstr = "{$wx['nonceStr']}";
+    var signaturestr = "{$wx['signature']}";
+wx.config({
+    debug: false,
+    appId: appIdstr,
+    timestamp: timestampstr,
+    nonceStr: nonceStrstr,
+    signature: signaturestr,
+    jsApiList: [
+        'checkJsApi',
+        'onMenuShareTimeline',
+        'onMenuShareAppMessage',
+        'onMenuShareQQ',
+        'onMenuShareWeibo',
+        'hideMenuItems',
+        'showMenuItems',
+        'hideAllNonBaseMenuItem',
+        'showAllNonBaseMenuItem',
+        'translateVoice',
+        'startRecord',
+        'stopRecord',
+        'onRecordEnd',
+        'playVoice',
+        'pauseVoice',
+        'stopVoice',
+        'uploadVoice',
+        'downloadVoice',
+        'chooseImage',
+        'previewImage',
+        'uploadImage',
+        'downloadImage',
+        'getNetworkType',
+        'openLocation',
+        'getLocation',
+        'hideOptionMenu',
+        'showOptionMenu',
+        'closeWindow',
+        'scanQRCode',
+        'chooseWXPay',
+        'openProductSpecificView',
+        'addCard',
+        'chooseCard',
+        'openCard'
+    ]
+  });
+
+function doWeixin() {  
+wx.ready(function () {
+ 
+		wx.hideOptionMenu();
+		wx.showMenuItems({
+			menuList: [
+			'menuItem:share:timeline', 
+			'menuItem:share:appMessage',
+			'menuItem:copyUrl',
+			],
+		}); 
+
+    wx.onMenuShareAppMessage({
+      title: document.getElementById('wx-share-title').value,
+      desc: document.getElementById('wx-share-desc').value,
+      link: document.getElementById("wx-share-link").value,
+      imgUrl: document.getElementById('wx-share-img').value,
+      trigger: function (res) {
+       // alert('用户点击发送给朋友');
+      },
+      success: function (res) {
+       // alert('已分享');
+	         
+      },
+      cancel: function (res) {
+        //alert('已取消');
+      },
+      fail: function (res) {
+        //alert(JSON.stringify(res));
+      }
+    });
+ 
+ // };
+
+  // 2.2 监听"分享到朋友圈"按钮点击、自定义分享内容及分享结果接口
+ // document.querySelector('#onMenuShareTimeline').onclick = function () {
+    wx.onMenuShareTimeline({
+      title: document.getElementById('wx-share-title').value,
+      link: document.getElementById("wx-share-link").value,
+      imgUrl: document.getElementById('wx-share-img').value,
+      trigger: function (res) {
+       // alert('用户点击分享到朋友圈');
+      },
+      success: function (res) {
+       	    $.post("{php echo $_W['siteroot'].'app/index.php?i='.$_W['uniacid'].'&c=entry&do=share&m='.$this->m_name;}",{id:{$rid},openid:"{$_W['openid']}"},function(data){   
+
+alert('分享朋友圈成功,今天能多抽奖'+{$row['share_prize_num']}+'次,多次分享无效!');
+
+});     
+      },
+      cancel: function (res) {
+      //  alert('已取消');
+      },
+      fail: function (res) {
+        //alert(JSON.stringify(res));
+      }
+    });
+   // alert('已注册获取"分享到朋友圈"状态事件');
+ // };
+
+  
+ 
+});
+}
+
+doWeixin();
+</script>
+<div id="mcovear" class="pop" style="display:none;">
+  <div class="box"><b class="closeb" onClick="document.getElementById('mcovear').style.display='none';" ></b>
+    <h1>填写领奖相关信息</h1>
+    <div class="inputqy">
+      <h2>SN码:<span id="sncode">09111351256631223</span></h2>
+      <input type="text" id="username" placeholder="请填入真实的姓名" />
+      <input type="text" id="tel" placeholder="请输入手机号，以便领取奖品" />
+    </div>
+    <div class="but_con"  >
+      <button class="button_yes" onClick="sendtel()">领奖</button>
+    </div>
+  </div>
+</div>
+<div id="dh" class="pop" style="display:none;">
+  <div class="box"><b class="closeb" onClick="document.getElementById('dh').style.display='none';" ></b>
+    <h1>申请兑换</h1>
+    <div class="inputqy">
+      <input type="text" readonly id="snid" value="" />
+      <input type="hidden" id="winner_id" value="" />
+      <input  type="password" id="password" placeholder="请输入兑换密码" />
+    </div>
+    <div class="but_con">
+      <button class="button_yes" onClick="ckpass()">确定</button>
+    </div>
+  </div>
+</div>
+<div id="zjl"  class="pop"  style="display:none;">
+  <div class="box"><b class="closeb" onClick="document.getElementById('zjl').style.display='none';" ></b>
+    <h1>恭喜您！您中奖了！</h1>
+    <div class="inputqy">
+      <div class="jpimg"><img  id="jpimg" src="images/share.jpg" /></div>
+      <div class="jptext">
+        <p id="jptype">xxx</p>
+        <p id="jpname">xxxxxx</p>
+      </div>
+    </div>
+    <div class="but_con">
+      <button class="button_yes" onClick="lq('','','')">领奖</button>
+    </div>
+  </div>
+</div>
+<div id="mzj"  class="pop" style="display:none;">
+  <div class="box">
+    <h1></h1>
+    <div class="inputqy">
+      <div class="jptext"><span id="ncz" class="ncz">很遗憾，没抽中任何奖品！</span></div>
+    </div>
+    <div class="but_con"  >
+      <button class="button_yes" onClick="document.getElementById('mzj').style.display='none';">知道啦</button>
+    </div>
+  </div>
+</div>
+</div>
+
+    <!--填写领奖信息-->
+<div id="wszlBox" class="pop" style="display:none;">
+  		<div class="box">
+        	<b class="closeb" onClick="document.getElementById('wszlBox').style.display='none';" ></b>
+    		<h1>填写领奖信息</h1>
+    		<div class="inputqy">
+                                    <input type="text" id="true_name" placeholder="请填入真实姓名" />
+                                    <input type="tel" id="phone" placeholder="请填入手机号码" />
+                                    <input type="text" id="address" placeholder="请填入详细地址" {if $row['g_address']==0}style="display:none;" {/if}/>
+                            </div>
+            <div class="but_con">
+                <button class="button_yes" onClick="sendtel()">确定</button>
+            </div>
+        </div>
+    </div>
+    
+    
+<div id="qttsxx"  class="pop" style="display:none;">
+  <div class="box"><b class="closeb" onClick="document.getElementById('qttsxx').style.display='none';" ></b>
+    <h1></h1>
+    <div class="inputqy">
+      <div class="jptext"><span id="ncz" class="ncz">其他提示性文字，比如，提示你输入什么错误！</span></div>
+    </div>
+    <div class="but_con"  > </div>
+  </div>
+</div>
+</div>
+<div class="container">
+  <div class="banner"><img src="{php echo tomedia($row['g_rule_img'])}" width="100%"></div>
+  <div class="content">
+  <a href="{php echo $_W['siteroot'].'app/'.$this->createMobileUrl('index',null,true).'&rid='.$rid;}">
+            	<div class="update back"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEgAAABICAMAAABiM0N1AAAARVBMVEUAAAD///////////////////////////////////////////////////////////////////////////////////////9SnXPCAAAAFnRSTlMA7zDPEGCff28ErlDfIPfMj41mV0AkVXw1LQAAANZJREFUWMPt1kkOAjEMRNHEmXpm9v2PChIS6WypijCIOsDbRN+K+/ZdRo5TdKJISZUixaCPLUJxtk29wM5zoCReXzuSnExyCvLuOychjtIdPwPOoEp5+Mx3wkpyIpIF38m4g2ex8PMaYAfPYvb8vMSA02T6+SysOW0Wv+PIzkmO00VxdVCpXliSJlBaWFIMHaRsRXK5gxSiFam0XwfK2fZiRqrhXc2E10MarOTSRZoiJlkMbycJmLDF8Ko0g5Lp8CqESWeHbj3UO4BtnDTcHGPjKbr/3t0ddlE0A42fh+MAAAAASUVORK5CYII="></div>
+            </a>
+    <input type="hidden" id="wszlend" value="<?php echo empty($fans['mobile'])?0:1;  ?>" /><!--是否注册-->        
+    {if empty($fans['mobile'])}<div class="tx3"><a id="wszl" href="javascript:;" class=" " onClick="wszl();">完善资料</a> </div>{/if}       
+    <div class="hdhdci">
+    
+    
+      <div class="title"><img src="{php echo tomedia($g_res['t1'])}" width="100%"/></div>
+      <div class="text">本次活动参与{$n}人，每天可以抽奖{$row['prize_day_num']}次，总共可抽奖{$row['prize_max_num']}次，你已经抽奖<span id="count">{$fans['prize_num']}</span>次了哦！今日抽奖了<span id="dcount">{$today_prize_num}</span>次哦！</div>
+    </div>
+    <div class="hdhdsm">
+    <div class="title"><img src="{php echo tomedia($g_res['t2'])}" width="100%"/></div>
+    <div class="text">{$row['g_rule_desc']}</div>
+  </div>
+  <div class="hdhdjp">
+  <div class="title"><img src="{php echo tomedia($g_res['t3'])}" width="100%"/></div>
+  <div class="prize3">
+    <ul>
+    
+    <?php 
+    			$lists = pdo_fetchall("SELECT *  FROM ".tablename($this->award) ." where weid=".$this->weid." and rid=$rid  ORDER BY id asc");
+    			if(!empty($lists)){
+    			foreach($lists as $v){
+    			
+    			
+    			 ?>
+            <li>
+        <div class="hdjptp">
+          <div class="jptu"><img src="{php echo tomedia($v['img'])}" />
+            <p class="jpgs">{$v['shownum']}</p>
+          </div>
+          <div class="jpms">
+            <p class="jpdj">{$v['dengji']}</p>
+            <p class="jpmc">{$v['title']}</p>
+          </div>
+        </div>
+      </li>
+       	<?php }} ?>
+      
+    </ul>
+  </div>
+  </div>
+  
+  <a id="wdjp"></a>
+  <div class="mylist">
+  <div class="title"><img src="{php echo tomedia($g_res['t4'])}" width="100%"/></div>
+  <div class="text list">
+    <ul>
+    <?php $listmy = pdo_fetchall("SELECT *  FROM ".tablename($this->award2) ." where weid=".$this->weid." and rid=$rid and openid='".$this->openid."'  ORDER BY id desc"); 
+    if(!empty($listmy)){
+    foreach($listmy as $vmy){
+       $sn = $vmy['sn'];
+      $vid = $vmy['id'];
+      $vt = ($vmy['isok']==1)?'已兑换':'兑换';
+      
+      $vk = ($vmy['isok']==0)?"class='button_01 button' onClick=\"dh('$sn','$vid')\"":'class="button_02 button"  disabled="disabled"';
+      ?>
+     <li><span class="time">{php echo date('Y-m-d H:i:s',$vmy['createtime']);}</span><span class="award">{$vmy['dengji']}</span>           <button {$vk}>{$vt}</button>
+                   <div class="clr"></div>
+        </li>
+        <?php }
+    } ?>
+          </ul>
+  </div>
+  </div>
+  
+  <div class="alllist">
+    <div class="title"><img src="{php echo tomedia($g_res['t5'])}" width="100%"/></div>
+    <div class="text list">
+      <ul>
+        <?php 
+    			$sqls = "select A.id,A.createtime,A.title,A.dengji,A.isok,A.sn,B.title as xm,B.mobile,B.address from ".tablename($this->award2) ." as A,".tablename($this->fans) ." as B where  A.openid=B.openid and A.rid=$rid and A.weid=".$this->weid." ORDER BY A.id DESC LIMIT 0,100";
+	$lists2 = pdo_fetchall($sqls);
+    			if(!empty($lists2)){
+    		
+    			foreach($lists2 as $v2){
+    			?> <li><span class="time fr">{php echo date('Y-m-d H:i:s',$v2['createtime']);}</span><span class="phone01">{php echo $this->hidetel($v2['mobile']);}<?php echo (empty($v2['mobile']))?"**未登记**":""; ?></span><span class="award">{$v2['dengji']}</span>
+          <div class="clr"></div>
+        </li>
+            <?php }} ?>
+         
+               
+         
+              </ul>
+    </div>
+  </div>
+</div>
+<div class="line"><img src="{php echo $this->yobyurl;}images/line.png" /></div>
+<div class="copyright"> <div class="copyright" style="text-align:center; color:#fff;" >{$row['g_copyright']}</div> </div>
+</div>
+<script>
+function lq(sncode,username,tel){
+$('#zjl').hide();
+document.getElementById('mcovear').style.display='block';
+if(sncode!=''){
+$('#sncode').text(sncode); 
+}
+$('#username').text(username);
+$('#tel').text(tel);
+}
+function dh(sncode,wid){
+var ling="{$fans['mobile']}";
+if (ling == '') {
+alert("请先完善领奖资料!");
+return false;
+}
+document.getElementById('dh').style.display='block'; 
+$('#snid').val(sncode);
+$('#winner_id').val(wid);
+}
+function sendtel(){
+var wszlend = $('#wszlend').val();
+if(wszlend == 1) {
+alert('您已经提交信息了！');	
+} else {
+$('#wszlBox').show();
+}
+}
+
+var wszlbtn = false;
+function sendtel() {//注册信息
+var true_name = $('#true_name').val();
+if(true_name == '') {
+alert('请输入真实姓名');
+return;
+}
+var phone = $('#phone').val();
+if(phone == '') {
+alert('请输入手机号码');
+return;
+}
+var regu = /^[1][0-9]{10}$/;
+if(!regu.test(phone)) {
+alert('请输入正确的手机号码');
+return;
+}
+var address = $('#address').val();
+{if $row['g_address']==1}
+if(address == '') {
+alert('请输入详细地址');
+return;
+}
+{/if}
+var submitData = {
+"title" : true_name,
+"mobile" : phone,
+"address" : address,
+};
+if(wszlbtn) return;
+wszlbtn = true;
+$.ajax({
+type : "POST",
+url :"{php echo $_W['siteroot'].'app/index.php?i='.$this->weid.'&c=entry&do=savename&m='.$this->m_name.'&rid='.$rid;}",
+data : submitData,
+contentType: "application/x-www-form-urlencoded; charset=utf-8",
+dataType : "json",
+success : function(data){
+if(data.done == 'true') {
+$('#wszlend').val('1');
+$('#wszlBox').hide();
+$('#zjlBox').hide();	
+alert('领奖信息提交成功!');	setTimeout('refreash()',1000);		
+} else {
+alert(data.msg);
+}
+wszlbtn = false;
+},
+timeout : 15000,
+error : function(xhr, type){
+wszlbtn = false;
+alert('网路不稳定，请稍候重试');
+}
+});
+
+}
+function wszl() {//注册信息已提交
+var wszlend = $('#wszlend').val();
+if(wszlend == 1) {
+alert('您已经提交信息了！');	
+} else {
+$('#wszlBox').show();
+}
+}
+function ckpass(){
+ 
+var password = $("#password").val();
+var wid = $('#winner_id').val();
+
+if (password == '') {
+alert("请输密码");
+return
+}
+
+
+
+var submitData = {
+password:password,
+wid:wid,
+};
+$.post("{php echo $_W['siteroot'].'app/index.php?i='.$this->weid.'&c=entry&do=prizesn&m='.$this->m_name.'&rid='.$rid;}", submitData,
+function(data) {
+if(data.done == 'true') {
+alert('兑换成功');
+setTimeout('refreash()',1000);
+} else {
+alert(data.msg);
+}
+ 
+
+},
+"json")
+
+}
+
+function refreash(){
+
+window.location.href="{php echo $_W['siteroot'].'app/index.php?i='.$this->weid.'&c=entry&do=rank&m='.$this->m_name.'&rid='.$rid;}"+"&cn=";
+}
+</script>
+</body>
+</html>

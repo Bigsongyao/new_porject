@@ -1,0 +1,13 @@
+<?php
+include(FUN_ROOT.'order.fun.php');
+include(FUN_ROOT.'product.fun.php');
+
+$user_id = $_SESSION['user_id'];
+$page = max(1, $_GPC['page']);
+$role = in_array($_GPC['role'], array('user', 'shoper')) ? $_GPC['role'] : 'user';
+$order_status = isset($_GPC['order_status']) ? $_GPC['order_status'] : 'all';
+
+$list = get_reser_order_list($role, $order_status, $page, 15, true);
+
+die(in_success(0, $list));
+

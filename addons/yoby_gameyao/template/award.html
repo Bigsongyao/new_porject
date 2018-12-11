@@ -1,0 +1,153 @@
+{template 'common/header'}
+<link href="{MODULE_URL}/template/mobile/weui/style.css" rel="stylesheet"/>
+<script type="text/javascript" src="{MODULE_URL}/template/mobile/weui/jquery.imagebox.js"></script>
+<script>
+		$(function(){
+$('.imgbox').imagebox();
+
+})
+		</script>
+<div class='container' style='padding:0 5px 10px;margin:0;width:100%'>
+
+<ul class="nav nav-tabs">
+ 
+  <li {if $op == 'display'}class="active"{/if}><a href="{php echo $this->createWebUrl('award',array('op'=>'display','rid'=>$_GPC['rid']));}">管理奖品</a></li>
+ <li {if $op == 'post'}class="active"{/if}><a href="{php echo $this->createWebUrl('award',array('op'=>'post','rid'=>$_GPC['rid']));}">添加奖品</a></li>
+  <li><a href="{php echo $this->createWebUrl('gl');}">游戏管理</a></li>
+</ul>
+{if $op =='display'}
+<div style="padding:15px;">
+<form id="form2" class="form-horizontal" method="post">
+		<table class="ui-table ui-border">
+			<thead class="navbar-inner">
+				<tr>
+				<th >全选</th>
+					<th>ID</th>
+					<th>奖品名称</th>
+					<th>奖品等级</th>
+					<th>图片</th>
+					<th>实际奖品</th>
+					<th>显示奖品</th>
+					<th>概率</th>
+					<th>操作 </th>
+				</tr>
+			</thead>
+			<tbody>
+				{loop $list $v}
+				<tr>
+					<td><input type="checkbox" value="{$v['id']}" name="delete[]"></td>
+					<td>{$v['id']}</td>
+					<td>{$v['title']}</td>
+						<td>{$v['dengji']}</td>
+						<td><img src="{php echo tomedia($v['img'])}" width="50" height="50"/></td>
+					<td>{$v['num']}</td>
+					<td>{$v['shownum']}</td>
+					<td>{php echo $v['gailv']}‰</td>
+					<td>
+					<a class="btn btn-success btn-sm" href="{php echo $this->createWebUrl('award', array('op' => 'post', 'id' => $v['id'],'rid'=>$_GPC['rid']))}" title="编辑">编辑</a>
+					&nbsp;&nbsp;&nbsp;
+					
+					
+					<a class="btn btn-danger btn-sm" onclick="return confirm('此操作不可恢复，确认吗？'); return false;" title="删除" href="{php echo $this->createWebUrl('award', array('op' => 'del', 'id' => $v['id']))}" >删除</a>
+					</td>				
+				</tr>
+				
+				{/loop}
+				<tr >
+				<td><input type="checkbox"  onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});" name=''>    </td><td><input class="btn btn-danger btn-sm" type="submit" value="删除" name="submit" ></td><td></td><td></td><td></td><td></td><td></td>
+				</tr>
+			</tbody>
+		</table>
+		<input type="hidden" value="award" name="do">
+		<input type="hidden" value="del" name="op">
+		<input type="hidden" name="token" value="{$_W['token']}" />
+		
+		
+		</form>
+		{$pager}
+	<script>
+		
+					$('#form2').submit(function(){
+if($(":checkbox[name='delete[]']:checked").size() > 0){
+return confirm('删除后不可恢复，您确定删除吗？');
+}
+return false;
+}); 
+
+
+		</script>	
+	</div>
+{elseif $op == 'post'}
+<div class="main">
+	<form action="" method="post" class="form-horizontal form">
+	<div class="panel panel-default">
+		
+		<div class="panel-body">
+			
+			<div class="form-group">
+				<label class="col-sm-2 control-label f-red">奖品名称</label>
+				<div class="col-sm-7">
+					<input type="text" name="title" class="form-control" value="<?php echo $item['title']; ?>" /> 
+					<span class="help-block">奖品名称</span>
+				</div>
+			</div>
+		<div class="form-group">
+				<label class="col-sm-2 control-label f-red">奖品等级</label>
+				<div class="col-sm-7">
+					<input type="text" name="dengji" class="form-control" value="<?php echo $item['dengji']; ?>" /> 
+					<span class="help-block">例如:特等奖,一等奖,二等奖...</span>
+				</div>
+			</div>
+   <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label f-red">实际奖品数</label>
+        <div class="col-sm-9 col-xs-12">
+  		
+  			<input type="number" value="{php echo empty($item['num'])?0:$item['num'];}" class="form-control" name="num" min='0' pattern="^\d+$" required>
+			<div class="help-block">真正的奖品数量,中奖是按照这个来中奖的</div>
+        </div>
+    </div>    
+	   <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label f-red">显示奖品数</label>
+        <div class="col-sm-9 col-xs-12">
+  		
+  			<input type="number" value="{php echo empty($item['shownum'])?0:$item['shownum'];}" class="form-control" name="shownum" min='0' pattern="^\d+$" required>
+			<div class="help-block">在手机端奖品页面显示奖品数量,发奖是不按照这个</div>
+        </div>
+    </div>  
+    	<div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label f-red">奖品图片</label>
+        <div class="col-sm-9 col-xs-12">
+         	{php echo tpl_form_field_image('img',$item['img']);}
+			<span class="help-block">用于规则页顶部图320X320 jpg最佳</span>
+        </div>
+    </div> 
+    	   <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label f-red">奖品概率</label>
+        <div class="col-sm-8 col-xs-11">
+  		
+  			<input type="number" value="{php echo empty($item['gailv'])?0:$item['gailv'];}" class="form-control"  style="display:inline-block;width:80%;" name="gailv" min='0' pattern="^\d+$" required><span style="display:inline-block;"  max="1000">‰</span>
+			<div class="help-block">概率之和是1000,不中奖请填写0,所有奖品概率不够1000的,剩余的就是不中奖概率(填写0到1000的整数)</div>
+        </div>
+    </div> 
+    	
+			<div class="form-group">
+				<label class="col-sm-2 control-label"></label>
+				<div class="col-sm-4">
+				<input type="hidden" name="rid" value="{php echo empty($_GPC['rid'])?$item['rid']:$_GPC['rid']; }">
+				<input type="hidden" name="id" value="{$item['id']}">
+				<input type="hidden" name="token" value="{$_W['token']}" />
+					<input name="submit" type="submit" value="提交" class="btn btn-primary span3" />
+					
+				</div>
+			</div>
+			
+			</div>
+			</div>
+	</form>
+</div>
+
+
+{/if}	
+</div>
+
+{template 'common/footer'}

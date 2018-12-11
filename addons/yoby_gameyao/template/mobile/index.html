@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html style="height:100%;">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+ <title>{$row['g_title']}</title>
+  
+<link href="{php echo $this->yobyurl}js/style.css" rel="stylesheet" type="text/css" />
+<link href="{php echo $this->yobyurl}js/ycj.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+.button {
+background-color: #000;opacity:0.8;
+}
+#an-anim {
+	background-color:{$row['g_bg_color']};}
+.text{ margin-bottom:10px}
+.rule {bottom: 15px !important;}
+</style>
+  <script src="{php echo $this->yobyurl}js/jquery-1.js" type="text/javascript"></script>
+
+
+<script>
+//需要调用leafinit（）来启动，需要声明外层div，id="container"，还有内层div，id="leafContainer"
+//参数设置
+var leafNum = 20;			//落下叶子的数量
+var kindNum = 5;			//叶子的种类
+//叶子使用图片地址，数量应与kindNum相同
+var kindurl = new Array("{php echo $this->yobyurl}images/19.png","{php echo $this->yobyurl}images/20.png","{php echo $this->yobyurl}images/18.png","{php echo $this->yobyurl}images/12.png","{php echo $this->yobyurl}images/16.png");
+</script>
+<script src="{php echo $this->yobyurl}js/fleaves.min.js" type="text/javascript"></script>
+
+<script>
+ var rid="{$rid}";//规则id
+      var  ajaxrec ="{php echo $_W['siteroot'].'app/index.php?i='.$this->weid.'&c=entry&do=ajaxrec&m='.$this->m_name.'&rid=';}"+rid;//写入记录
+      var  myrank = "{php echo $_W['siteroot'].'app/index.php?i='.$this->weid.'&c=entry&do=rank&m='.$this->m_name.'&rid=';}"+rid+"&cn=#wdjp";//排行榜
+      var  rule = "{php echo $_W['siteroot'].'app/index.php?i='.$this->weid.'&c=entry&do=rank&m='.$this->m_name.'&rid=';}"+rid+"&cn=";//规则
+      var  yobyindex = "{php echo $_W['siteroot'].'app/index.php?i='.$this->weid.'&c=entry&do=index&m='.$this->m_name.'&rid=';}"+rid;//首页
+      
+
+</script>
+<link rel="stylesheet" href="{php echo $this->yobyurl}js/leavesGeneral.css" type="text/css" media="screen" charset="utf-8">
+
+
+</head>
+        <?php
+    $wx['url'] = $wx['url'] =$_W['siteroot'].'app/index.php?i='.$_W['uniacid'].'&c=entry&rid='.$rid.'&do=index&m=yoby_gameyao&wxref=mp.weixin.qq.com';
+
+$wxurl = $wx['url'];
+
+ $fans = pdo_fetch("SELECT * FROM ".tablename($this->fans)." WHERE rid = '".$rid."' and openid='".$this->openid."' ");
+    ?>
+<body style="margin:0; height: 100%; background-color:{$row['g_bg_color']};">
+<?php
+  if(!empty($row['share_url'])){
+  $follow = pdo_fetchcolumn('SELECT follow FROM ' . tablename('mc_mapping_fans')."  where uniacid=".$this->weid." and openid='".$this->openid."' " );
+  if(empty($follow)){
+?>
+<script>
+document.writeln("<style type=\"text/css\">");
+document.writeln(".wxapiErweima { position: fixed; right: 15px; top: 50%; margin-top:-25px;  z-index: 99999999; height: 40px; width: 40px; }");
+document.writeln(".wxapiErweima .erweimaxxx { cursor: pointer; position: absolute; display: block; width: 20px; height: 20px; text-indent: -9999px; top: -20px; right: -10px; background-color: rgba(255, 255, 255, 0.4); border-radius: 100%; box-shadow: 0 0 5px 0px rgba(0, 0, 0, 0.15); }");
+document.writeln(".wxapiErweima .erweimaxxx:before { position: absolute; content: \'.\'; display: block; width: 14px; height: 1px; background-color: rgba(0, 0, 0, 0.5); -webkit-transform: rotate(-45deg); top: 10px; left: 3px; }");
+document.writeln(".wxapiErweima .erweimaxxx:after { position: absolute; content: \'.\'; display: block; width: 14px; height: 1px; background-color: rgba(0, 0, 0, 0.5); -webkit-transform: rotate(45deg); top: 10px; left: 3px; }");
+document.writeln(".ErweimaSaomiao { display: none; background-color: rgba(0, 0, 0, 0.8); position: fixed; z-index: 99999990; top: 0; left: 0; right: 0; bottom: 0; }");
+document.writeln(".ErweimaSaomiao.active { display: block }");
+document.writeln(".ErweimaSaomiao .erweimalogo { display: block; background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPkAAAD8CAYAAAC1ggIjAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAABZ0RVh0Q3JlYXRpb24gVGltZQAwNi8yMi8xNl283cUAAAAcdEVYdFNvZnR3YXJlAEFkb2JlIEZpcmV3b3JrcyBDUzbovLKMAAAC80lEQVR4nO3TQQ0AIBDAMMC/50MFIVlaBftsz8wsIOv8DgDeMjnEmRziTA5xJoc4k0OcySHO5BBncogzOcSZHOJMDnEmhziTQ5zJIc7kEGdyiDM5xJkc4kwOcSaHOJNDnMkhzuQQZ3KIMznEmRziTA5xJoc4k0OcySHO5BBncogzOcSZHOJMDnEmhziTQ5zJIc7kEGdyiDM5xJkc4kwOcSaHOJNDnMkhzuQQZ3KIMznEmRziTA5xJoc4k0OcySHO5BBncogzOcSZHOJMDnEmhziTQ5zJIc7kEGdyiDM5xJkc4kwOcSaHOJNDnMkhzuQQZ3KIMznEmRziTA5xJoc4k0OcySHO5BBncogzOcSZHOJMDnEmhziTQ5zJIc7kEGdyiDM5xJkc4kwOcSaHOJNDnMkhzuQQZ3KIMznEmRziTA5xJoc4k0OcySHO5BBncogzOcSZHOJMDnEmhziTQ5zJIc7kEGdyiDM5xJkc4kwOcSaHOJNDnMkhzuQQZ3KIMznEmRziTA5xJoc4k0OcySHO5BBncogzOcSZHOJMDnEmhziTQ5zJIc7kEGdyiDM5xJkc4kwOcSaHOJNDnMkhzuQQZ3KIMznEmRziTA5xJoc4k0OcySHO5BBncogzOcSZHOJMDnEmhziTQ5zJIc7kEGdyiDM5xJkc4kwOcSaHOJNDnMkhzuQQZ3KIMznEmRziTA5xJoc4k0OcySHO5BBncogzOcSZHOJMDnEmhziTQ5zJIc7kEGdyiDM5xJkc4kwOcSaHOJNDnMkhzuQQZ3KIMznEmRziTA5xJoc4k0OcySHO5BBncogzOcSZHOJMDnEmhziTQ5zJIc7kEGdyiDM5xJkc4kwOcSaHOJNDnMkhzuQQZ3KIMznEmRziTA5xJoc4k0OcySHO5BBncogzOcSZHOJMDnEmhziTQ5zJIc7kEGdyiDM5xJkc4kwOcSaHOJNDnMkhzuQQZ3KIMznEmRziTA5xJoc4k0OcySHO5BBncogzOcSZHOIuWhUF9P+NQ7IAAAAASUVORK5CYII=) no-repeat 10px 10px #FFF; background-size: 249px 252px; width: 249px; position: absolute; top: 50%; left: 50%; margin-top: -153px; margin-left: -135px; padding: 10px; border-radius: 6px; }");
+document.writeln(".ErweimaSaomiao .erweimalogo .erweimaimg { display: block; margin: 2px; width: 245px; height: 248px; opacity: 1 }");
+document.writeln(".ErweimaSaomiao .erweimalogo .erweimaSaomiaowz { display: block; margin: 15px 10px 5px 10px; color: #333; font-size: 14px; text-align: center }");
+document.writeln("</style>");
+document.writeln("<div class=\"ErweimaSaomiao active\"  id=\"CustomerErweimaSaomiao\">");
+document.writeln("  <div class=\"erweimalogo\"> <img class=\"erweimaimg\" src=\"{php echo tomedia($row['share_url'])}\">");
+document.writeln("    <p class=\"erweimaSaomiaowz\">请长按二维码并选择菜单中识别图中二维码</p>");
+document.writeln("  </div>");
+document.writeln("</div>");
+</script>
+<?php }} ?>
+<img src="{php echo tomedia($row['share_img'])}"  style="display:none" />
+<input id="wx-share-title" type="hidden" value="{$row['share_title']}" />
+<input id="wx-share-img" type="hidden" value="{php echo tomedia($row['share_img'])}" />
+<input id="wx-share-desc" type="hidden" value="{$row['share_desc']}" />
+<input id="wx-share-link" type="hidden" value="{$wxurl}" />
+<input id="sharebackurl" type="hidden" value="" />
+<script src="//res.wx.qq.com/open/js/jweixin-1.0.0.js" type="text/javascript"></script>
+ 	<?php
+$wx = $_W['account']['jssdkconfig'];
+?>
+<script type="text/javascript">
+    var appIdstr = "{$wx['appId']}";
+    var timestampstr = "{$wx['timestamp']}";
+    var nonceStrstr = "{$wx['nonceStr']}";
+    var signaturestr = "{$wx['signature']}";
+wx.config({
+    debug: false,
+    appId: appIdstr,
+    timestamp: timestampstr,
+    nonceStr: nonceStrstr,
+    signature: signaturestr,
+    jsApiList: [
+        'checkJsApi',
+        'onMenuShareTimeline',
+        'onMenuShareAppMessage',
+        'onMenuShareQQ',
+        'onMenuShareWeibo',
+        'hideMenuItems',
+        'showMenuItems',
+        'hideAllNonBaseMenuItem',
+        'showAllNonBaseMenuItem',
+        'translateVoice',
+        'startRecord',
+        'stopRecord',
+        'onRecordEnd',
+        'playVoice',
+        'pauseVoice',
+        'stopVoice',
+        'uploadVoice',
+        'downloadVoice',
+        'chooseImage',
+        'previewImage',
+        'uploadImage',
+        'downloadImage',
+        'getNetworkType',
+        'openLocation',
+        'getLocation',
+        'hideOptionMenu',
+        'showOptionMenu',
+        'closeWindow',
+        'scanQRCode',
+        'chooseWXPay',
+        'openProductSpecificView',
+        'addCard',
+        'chooseCard',
+        'openCard'
+    ]
+  });
+
+function doWeixin() {  
+wx.ready(function () {
+ 
+		wx.hideOptionMenu();
+		wx.showMenuItems({
+			menuList: [
+			'menuItem:share:timeline', 
+			'menuItem:share:appMessage',
+			'menuItem:copyUrl',
+			],
+		}); 
+
+    wx.onMenuShareAppMessage({
+      title: document.getElementById('wx-share-title').value,
+      desc: document.getElementById('wx-share-desc').value,
+      link: document.getElementById("wx-share-link").value,
+      imgUrl: document.getElementById('wx-share-img').value,
+      trigger: function (res) {
+       // alert('用户点击发送给朋友');
+      },
+      success: function (res) {
+       // alert('已分享');
+	         
+      },
+      cancel: function (res) {
+        //alert('已取消');
+      },
+      fail: function (res) {
+        //alert(JSON.stringify(res));
+      }
+    });
+ 
+ // };
+
+  // 2.2 监听"分享到朋友圈"按钮点击、自定义分享内容及分享结果接口
+ // document.querySelector('#onMenuShareTimeline').onclick = function () {
+    wx.onMenuShareTimeline({
+      title: document.getElementById('wx-share-title').value,
+      link: document.getElementById("wx-share-link").value,
+      imgUrl: document.getElementById('wx-share-img').value,
+      trigger: function (res) {
+       // alert('用户点击分享到朋友圈');
+      },
+      success: function (res) {
+       	    $.post("{php echo $_W['siteroot'].'app/index.php?i='.$_W['uniacid'].'&c=entry&do=share&m='.$this->m_name;}",{rid:{$rid},openid:"{$_W['openid']}"},function(data){   
+
+alert('分享朋友圈成功,今天能多抽奖'+{$row['share_prize_num']}+'次,多次分享无效!');
+
+});     
+      },
+      cancel: function (res) {
+      //  alert('已取消');
+      },
+      fail: function (res) {
+        //alert(JSON.stringify(res));
+      }
+    });
+   // alert('已注册获取"分享到朋友圈"状态事件');
+ // };
+
+  
+ 
+});
+}
+
+doWeixin();
+</script> 
+<div id="mcovear" class="pop" style="display:none;"><audio id="yao"  src="{php echo $this->yobyurl}js/v4.mp3"></audio>
+  <div class="box"><b class="closeb" onClick="document.getElementById('mcovear').style.display='none';window.flag = 1;" ></b>
+    <h1>填写领奖相关信息</h1>
+    <div class="inputqy">
+     <h2>SN码:<span id="sncode">09111351256631223</span></h2>
+      <input type="text" id="username" placeholder="请填入真实的姓名" />
+      <input type="text" id="tel" placeholder="请输入手机号，以便领取奖品" />
+    </div>
+    <div class="but_con"  >
+        <button class="button_yes" onClick="sendtel()">领奖</button>
+      </div>
+  </div>
+</div>
+{if !empty($row['g_isreg'])}
+    <!--填写领奖信息-->
+     {if empty($fans['mobile'])}
+<div id="wszlBox" class="pop" >
+  		<div class="box">
+        	<b class="closeb" onClick="document.getElementById('wszlBox').style.display='none';" ></b>
+    		<h1>填写领奖信息</h1>
+    		<div class="inputqy">
+                                    <input type="text" id="true_name" placeholder="请填入真实姓名" />
+                                    <input type="tel" id="phone" placeholder="请填入手机号码" />
+                                    <input type="text" id="address" placeholder="请填入详细地址" {if $row['g_address']==0}style="display:none;" {/if} />
+                            </div>
+            <div class="but_con">
+                <button class="button_yes" onClick="sendtel()">确定</button>
+            </div>
+        </div>
+    </div>
+    {/if}
+ {/if}
+<div id="dh" class="pop" style="display:none;">
+  <div class="box"><b class="closeb" onClick="document.getElementById('dh').style.display='none';window.flag = 1;" ></b>
+    <h1>申请兑换</h1>
+    <div class="inputqy">
+      <input type="text" readonly id="snid" value="" />
+      <input  type="password" id="password" placeholder="请输入兑换密码" />
+    </div>
+    <div class="but_con">
+      <button class="button_yes" onClick="ckpass()">确定</button>
+    </div>
+  </div>
+</div>
+
+ 
+<div id="zjl"  class="pop"  style="display:none;">
+    <div class="box"><b class="closeb" onClick="document.getElementById('zjl').style.display='none';window.flag = 1;" ></b>
+      <h1>恭喜您！您中奖了！</h1>
+      <div class="jpimg"><img  id="jpimgx" src="images/share.jpg" /></div>
+     
+      <div class="inputqy">
+      	
+        <div class="jptext">
+       
+        <p id="jptype">xxx</p>
+        <p id="jpname">xxxxxx</p></div>
+        </div>
+        <div class="but_con">
+          <button class="button_yes" onClick="document.getElementById('zjl').style.display='none';window.flag = 1;">确定</button>
+        </div>
+      
+    </div>
+</div>
+
+ 
+<div id="mzj"  class="pop" style="display:none;">
+    <div class="box">
+      <h1></h1>
+      <div class="inputqy">
+        <div class="jptext"><span id="ncz" class="ncz">很遗憾，没抽中任何奖品！</span></div>
+        </div>
+        <div class="but_con"  >
+          <button class="button_yes" onClick="document.getElementById('mzj').style.display='none';window.flag = 1;">知道啦</button>
+        </div>
+      </div>
+    </div>
+ 
+
+ 
+<div id="qttsxx"  class="pop" style="display:none;">
+    <div class="box"><b class="closeb" onClick="document.getElementById('qttsxx').style.display='none';window.flag = 1;" ></b>
+      <h1></h1>
+      <div class="inputqy">
+        <div class="jptext"><span id="ncz" class="ncz">其他提示性文字，比如，提示你输入什么错误！</span></div>
+        </div>
+        <div class="but_con"  >
+        </div>
+      </div>
+    </div>
+ 
+<div id="leafContainer" style="z-index:1;"> </div>
+ 
+<div class="rule">
+<div class="text hdhdci"></div>
+<button class="button" onclick="javascript:window.location.href=rule">活动规则</button><button class="button" onclick="javascript:window.location.href=myrank">我的奖品</button> 
+<div class="text hdhdci" style="line-height:20px;margin-top:10px">{$row['g_copyright']}</div>
+</div>
+
+<div id="an-anim">
+
+  <ol>
+    <li id="an-scene-0" class="run t-0">
+      <div class="an-stage">
+        <div id="an-obj-1">
+          <div><img  height="389" width="388"  src="{php echo tomedia($g_res['t14'])}"></div>
+        </div>
+        <div id="an-obj-2">
+          <div><img  height="137" width="129"  src="{php echo tomedia($g_res['t10'])}"></div>
+        </div>
+        <div id="an-obj-3">
+          <div><img  height="118" width="109"  src="{php echo tomedia($g_res['t11'])}"></div>
+        </div>
+        <div id="an-obj-4">
+          <div><img  height="143" width="136"  src="{php echo tomedia($g_res['t12'])}"></div>
+        </div>
+        <div id="an-obj-5">
+          <div><img  height="109" width="47"  src="{php echo tomedia($g_res['t7'])}"></div>
+        </div>
+        <div id="an-obj-6">
+          <div><img  height="58" width="74"  src="{php echo tomedia($g_res['t6'])}"></div>
+        </div>
+        <div id="an-obj-7">
+          <div><img  height="46" width="62"  src="{php echo tomedia($g_res['t8'])}"></div>
+        </div>
+        <div id="an-obj-8">
+          <div><img  height="31" width="60"  src="{php echo tomedia($g_res['t9'])}"></div>
+        </div>
+        <div id="an-obj-9">
+          <div><img  height="342" width="193"  src="{php echo tomedia($g_res['t15'])}"></div>
+        </div>
+        <div id="an-obj-10">
+          <div><img  height="448" width="448"  src="{php echo tomedia($g_res['t13'])}"></div>
+        </div>
+        <div id="an-obj-11"></div>
+        <div id="an-obj-12"></div>
+        <div id="an-obj-13"></div>
+        <div id="an-obj-14">
+          <div id="yao_saizi"><img  height="217" width="443"  src="{php echo tomedia($g_res['t16'])}"></div>
+        </div>
+      </div>
+    </li>
+  </ol>
+</div>
+</div>
+
+<script>
+function changesize(id){
+document.getElementById(id).style.cssText = " -webkit-transform:scale("+(document.body.clientWidth/640) +");";
+}
+
+window.onresize = function(){ 
+ changesize("an-anim");
+} 
+ changesize("an-anim");
+
+ var flag = 1;
+ $(document).ready(function() {
+
+//var bo_times = 0;
+//var use_times =1;
+    var SHAKE_THRESHOLD = 1300;
+    var last_update = 0;
+    var x = y = z = last_x = last_y = last_z = 0;
+    if(window.DeviceMotionEvent) {
+    	window.addEventListener('devicemotion', deviceMotionHandler, false);
+    } else {
+alert('你的手机不支持摇，请点击中间手机进行抽奖');
+    	$('#leafContainer').click(function(){
+if(window.flag==1){
+getjp();
+}
+});
+    }
+ 
+    function deviceMotionHandler(eventData) {
+
+var acceleration = eventData.accelerationIncludingGravity;
+var curTime = new Date().getTime();
+if((curTime - last_update) > 100) {
+var diffTime = curTime - last_update;
+last_update = curTime;
+x = acceleration.x;
+y = acceleration.y;
+z = acceleration.z;
+var speed = Math.abs(x + y + z - last_x - last_y - last_z) / diffTime * 10000;
+if(speed > SHAKE_THRESHOLD) {
+//var order = $("#log tr").length + 1;
+ WeixinJSBridge.invoke('getNetworkType', {}, function (res) {
+         document.getElementById('yao').play();
+    });
+if(window.flag == 1) {
+window.flag =0;
+
+setTimeout("getjp()",1000);
+}
+};
+last_x = x;
+last_y = y;
+last_z = z;
+};
+    };
+
+ 
+ 
+ 
+$('#yao_saizi').click(function(){
+if(window.flag==1){
+ getjp();
+}
+ 
+});
+});
+ 
+ 	function getjp(){//抽奖函数
+$.ajax({
+url : "{php echo $_W['siteroot'].'app/index.php?i='.$this->weid.'&c=entry&do=yao&m='.$this->m_name.'&rid='.$rid;}",
+type : "post",
+dataType : "json",
+data : {},
+beforeSend : function(){
+$('#zjl').hide();
+$('#mzj').hide();
+ 					
+},
+success : function(data){
+if(data.done == 'true') {
+ 
+ $('#zjl').show();
+$('#jpimgx').attr("src",data.jpimg);
+$('#jp').attr("src",data.jpimg);
+$('#jptype').html(data.jpdengji);
+$('#jpname').text(data.jpname);
+$('#sncode').text(data.sncode); 
+ leafinit();
+}else if(data.done == 'false'){
+$('#mzj').show();
+ 	$('#ncz').text(data.msg);
+}else{
+alert(data.msg);
+}
+},
+complete :function() { }
+});
+
+ window.flag =0; 
+    
+}
+//抽取奖品结束------------------------------------
+ function lq(sncode,username,tel){
+$('#zjl').hide();
+document.getElementById('mcovear').style.display='block';
+if(sncode!=''){
+$('#sncode').text(sncode); 
+}
+$('#username').text(username);
+$('#tel').text(tel);
+}
+function dh(sncode,username,tel){
+document.getElementById('dh').style.display='block'; 
+$('#snid').val(sncode);
+}
+var wszlbtn = false;
+function sendtel() {//注册信息
+var true_name = $('#true_name').val();
+if(true_name == '') {
+alert('请输入真实姓名');
+return;
+}
+var phone = $('#phone').val();
+if(phone == '') {
+alert('请输入手机号码');
+return;
+}
+var regu = /^[1][0-9]{10}$/;
+if(!regu.test(phone)) {
+alert('请输入正确的手机号码');
+return;
+}
+var address = $('#address').val();
+var submitData = {
+"title" : true_name,
+"mobile" : phone,
+"address" : address,
+};
+if(wszlbtn) return;
+wszlbtn = true;
+$.ajax({
+type : "POST",
+url :"{php echo $_W['siteroot'].'app/index.php?i='.$this->weid.'&c=entry&do=savename&m='.$this->m_name.'&rid='.$rid;}",
+data : submitData,
+contentType: "application/x-www-form-urlencoded; charset=utf-8",
+dataType : "json",
+success : function(data){
+if(data.done == 'true') {
+$('#wszlend').val('1');
+$('#wszlBox').hide();
+$('#zjlBox').hide();	
+alert('领奖信息提交成功!');	setTimeout('refreash()',1000);		
+} else {
+alert(data.msg);
+}
+wszlbtn = false;
+},
+timeout : 15000,
+error : function(xhr, type){
+wszlbtn = false;
+alert('网路不稳定，请稍候重试');
+}
+});
+
+}
+
+function ckpass(){
+ 
+var password = $("#password").val();
+if (password == '') {
+alert("请输密码");
+return
+}
+ 
+
+var submitData = {
+password:password,
+formhash: "2e6d3349",
+code: $("#snid").val(),
+action: "setps"
+};
+$.post('index.php?ac=ycjuser&id=650&tid=1&token=oyV8_t_LMNva_TP3TDuvYnZDXlcs', submitData,
+function(data) {
+if (data.success == 1) {
+alert(data.msg);
+if (data.changed){
+ setTimeout('refreash()',1000);
+}
+return
+} else {}
+},
+"json")
+
+}
+
+function refreash(){
+
+window.location.href = location.href;
+}
+
+ function audioplay(id){
+    var audio = document.getElementById(id);
+   !audio.paused?audio.pause():audio.play();
+
+    
+    document.addEventListener("WeixinJSBridgeReady", function () {
+          !audio.paused?audio.pause():audio.play();
+    }, false); 
+}
+</script>
+
+</body>
+</html>

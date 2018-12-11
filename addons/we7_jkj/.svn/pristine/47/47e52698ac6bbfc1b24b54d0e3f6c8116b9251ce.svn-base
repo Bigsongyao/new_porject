@@ -1,0 +1,31 @@
+<?php
+include(FUN_ROOT.'product.fun.php');
+
+$product_id = isset($_GPC['product_id']) ? intval($_GPC['product_id']) : 0;
+$collect = empty($_GPC['collect']) ? 0 : 1;
+$user_id = $_SESSION['user_id'];
+
+if(empty($user_id)){
+    die(json_encode(in_error(1, '请先登录')));
+}
+
+if(!get_product_info($product_id)){
+    die(json_encode(in_error(2, '商品不存在')));
+}
+
+if($collect){
+    pdo_insert('jkj_collect', array(
+        'product_id' => $product_id,
+        'user_id' => $user_id,
+        'add_time' => TIMESTAMP,
+        ':uniacid' => $_W['uniacid']
+    ));
+}else{
+    pdo_delete('jkj_collect', array(
+        'product_id' => $product_id,
+        'user_id' => $user_id,
+        ':uniacid' => $_W['uniacid']
+    ));
+}
+
+die(json_encode(in_success(0)));

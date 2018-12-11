@@ -1,0 +1,96 @@
+<?php
+defined('IN_IA') or exit('Access Denied');
+
+/** 发送预约订单提醒
+ * @param $oid
+ */
+function order_remind($role, $user_id, $content = ''){
+    global $_W;
+
+    if($role == 1){
+        $result = pdo_fetchcolumn('SELECT is_designer FROM '.tablename('jkj_user').' WHERE user_id=:user_id AND uniacid=:uniacid', array(':user_id' => $user_id, ':uniacid' => $_W['uniacid']));
+    }elseif($role == 2){
+        $result = pdo_fetchcolumn('SELECT is_shoper FROM '.tablename('jkj_user').' WHERE user_id=:user_id AND uniacid=:uniacid', array(':user_id' => $user_id, ':uniacid' => $_W['uniacid']));
+    }else{
+        $result = pdo_fetchcolumn('SELECT user_id FROM '.tablename('jkj_user').' WHERE user_id=:user_id AND uniacid=:uniacid', array(':user_id' => $user_id, ':uniacid' => $_W['uniacid']));
+    }
+
+    if(!$result){
+        return false;
+    }
+
+    $data = array(
+        'user_id' => $user_id,
+        'content' => $content,
+        'uniacid' => $_W['uniacid'],
+        'status' => 0,
+        'add_time' => TIMESTAMP,
+        'role' => $role,
+        'uniacid' => $_W['uniacid']
+    );
+
+}
+
+/** 生成新的订单号
+ *
+ */
+function order_sn($shop_id){
+    return date('Ymdhis').mt_rand(1000, 9999);
+}
+
+/** 获取体验订单列表
+ *
+ */
+function get_reser_order_list($role, $order_status, $page = 1, $size = 15,  $is_ajax = false){
+    global $_W;
+
+    $user_id = $_SESSION['user_id'];
+    $is_shoper = $_SESSION['is_shoper'];
+
+    if($role == 'user' && $user_id){
+        $field = 'user_id';
+        $value = $user_id;
+    }elseif($role == 'designer' && $is_shoper){
+        $field = 'shop_id';
+        $value = pdo_fetchcolumn("SELECT shop_id FROM ".tablename('jkj_shops')." WHERE shoper_id=:user_id AND uniacid=:uniacid", array(':user_id' => $user_id, ':uniacid' => $_W['uniacid']));
+    }else{
+        return false;
+    }
+    if($order_status != 'all'){
+        $par[':status'] = $order_status;
+    }
+
+    $par[':uniacid'] = $_W['uniacid'];
+    $par[':field'] = $value;
+
+    $fields = 'oid,product_id,order_sn,shop_id,name,mobile,order_time,order_status,add_time,order_id,is_cancel';
+
+    $sql = "SELECT {$fields} FROM ".tablename('jkj_reser_order')." WHERE uniacid=:uniacid AND {$field}=:field AND status=:status ORDER BY add_time DESC LIMIT ".$size*($page-1).",".$size;
+    $list = pdo_fetchall($sql, $par);
+
+    foreach($list as $key => $val){
+
+        if($val['product_id']){
+            $product[$val['product_id']] = isset($product[$val['product_id']]) ? $product[$val['product_id']] : get_product_info($val['product_id']);
+
+            $list[$key]['product_name'] = $product[$val['product_id']]['product_name'];
+            $list[$key]['product_thumb'] = $product[$val['product_id']]['product_thumb'];
+        }else{
+            $list[$key]['product_name'] = '快速预约体验';
+            $list[$key]['product_thumb'] = '';
+        }
+
+    }
+
+    $total = pdo_fetchcolumn("SELECT COUNT(*) FROM ".tablename('jkj_user')." WHERE uniacid=:uniacid AND {$field}=:field AND status=:status", $par);
+    if($is_ajax){
+        $result['now_page'] = $page;
+        $result['max_page'] = ceil($total/$size);
+    }else{
+        $result['pager'] = pagination($total, $page, $size);
+    }
+
+    return $result;
+}
+
+?>

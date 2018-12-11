@@ -1,0 +1,33 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">商品风格</h4>
+        </div>
+        <div class="modal-body">
+            <div class="form-group form-md-line-input">
+                <label class="control-label col-md-3">名称</label>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" placeholder="" name="title" value="{$item['title']}">
+                </div>
+            </div>
+            <br/>
+            <div class="form-group form-md-line-input">
+                {loop $style_list $row}
+                <div class="col-md-3">
+                    <img src="{php echo tomedia($row['style_img'])}" width="100" />
+                    <label>
+                        <input type="checkbox" value="{$row['style_id']}" name="style_str[]" {if in_array($row['style_id'], $style_arr)}checked{/if}/>
+                        {$row['style_name']}
+                    </label>
+                </div>
+                {/loop}
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="button" class="btn btn-primary" onclick="editStyle({if !empty($item['sid'])}{$item['sid']}{else}0{/if})">提交</button>
+        </div>
+    </div><!-- /.modal-content -->
+</div><!-- /.modal -->

@@ -1,0 +1,191 @@
+{template 'common/header'}
+<link href="{MODULE_URL}/template/mobile/weui/style.css" rel="stylesheet"/>
+<script>
+$(function(){
+ $(".ui-table").each(function () {
+        var _this = $(this);
+        _this.find("tr:even").css("background-color", "#f5f5f5");
+        _this.find("tr:odd").css("background-color", "#fff");
+        _this.find("tr:not(:first)").hover(function () {
+            $(this).attr("bColor", $(this).css("background-color")).css("background-color", "#fcf8e3").css("cursor", "pointer");
+        }, function () {
+            $(this).css("background-color", $(this).attr("bColor"));
+        });
+ 
+    });
+    });
+    </script>
+    <ul class="nav nav-tabs">
+	<li ><a href="{php echo $this->createWebUrl('gl');}">游戏管理</a></li>
+		<li {if $op == 'display'}class="active"{/if}><a href="{php echo $this->createWebUrl('award2',array('op'=>'display','rid'=>$_GPC['rid']));}">中奖管理</a></li>
+		<li {if $op == 'post'}class="active"{/if}><a href="{php echo $this->createWebUrl('award2',array('op'=>'post','rid'=>$_GPC['rid']));}">添加中奖</a></li>
+</ul>	
+{if $op =='display'}
+ <div class="panel panel-info">
+	<div class="panel-heading">筛选</div>
+	<div class="panel-body">
+		<form action="./index.php" method="get" class="form-horizontal" role="form">
+			<input type="hidden" name="c" value="site" />
+			<input type="hidden" name="a" value="entry" />
+        	<input type="hidden" name="m" value="{php echo $this->m_name;}" />
+        	<input type="hidden" name="do" value="award2" />
+        	<input type="hidden" name="rid" value="{$_GPC['rid']}" />
+            <div class="form-group">
+				
+                <div class=" col-sm-4">
+					<input type="text" name="keyword" placeholder="搜索SN码" value="{$_GPC['keyword']}"  class="form-control" style="width:70%;display:inline-block;" />
+					<button style="margin-left:30px;" class="btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="搜索"><span class="fa fa-search fa-lg"></span></button>
+				</div>
+			</div>
+	 
+      		
+		</form>
+	</div>
+</div>
+<div class="panel panel-default">
+	<div class="panel-heading">详细数据 | 数据<span class='f-red'><?php echo $total; ?></span>条,可导出1000条 |  <a data-toggle="tooltip" data-placement="top" title="导出csv" class="btn-success btn-sm" href="{php echo $this->createWebUrl('daodata2',array('rid'=>$_GPC['rid']))}">导出中奖CVS</a></div>
+        <div class="panel-body table-responsive">
+			<form action="" method="post" onsubmit=""  id="form2">
+				<table class="ui-table ui-border">
+					<thead class="navbar-inner">
+					<tr>
+						<th >选择</th>
+						<th >姓名</th>
+						<th >手机</th>
+						<th >地址</th>
+						<th>名称</th>
+						<th >等级</th>
+						<th>状态</th>
+						<th>SN</th>
+						<th>时间</th>
+						
+						<th>操作</th>
+					</tr>
+					</thead>
+					<tbody>
+					{loop $list  $v}
+					<tr>
+						<td><input type="checkbox" name="delete[]" value="{$v['id']}" /></td>
+						<td>{$v['xm']}</td>
+						<td>{$v['mobile']}</td>
+						<td>{php echo cutstr($v['address'],10)}</td>
+						<td>{$v['title']}</td>
+						<td>{$v['dengji']}</td>
+						<td><?php echo  ($v['isok']==1)?"已领取":"未领取";?></td>
+						<td>{$v['sn']}</td>
+						<td>{php echo date('Y-m-d H:i',$v['createtime']);}</td>
+						
+						<td style="text-align:center;width:250px;">
+						
+                        	<a  data-toggle="tooltip" data-placement="top" title="编辑" class="btn btn-success btn-sm" href="{php echo $this->createWebUrl('award2', array('op' => 'post', 'id' => $v['id'],'rid'=>$_GPC['rid']))}">修改数据</a>
+                     
+
+                        	
+                        	<a data-toggle="tooltip" data-placement="top" title="删除" class="btn btn-sm btn-danger" href="{php echo $this->createWebUrl('award2', array('op' => 'del', 'id' => $v['id']))}"   onclick="return confirm('此操作不可恢复，确认吗？'); return false;">删除</a>
+                        </td>
+					</tr>
+					{/loop}
+					</tbody>
+				</table>
+				<table class="table">
+					<tr>
+						<td style="width:40px; border-top:none;" class="row-first"><input type="checkbox"  onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});" name=''>    </td>
+						<td style="border-top:none;">
+						<input data-toggle="tooltip" data-placement="top" title="删除" class="btn btn-sm btn-danger" type="submit" value="删除" name="submit" >
+								<input type="hidden" value="award2" name="do">
+		<input type="hidden" value="del" name="op">
+							<input type="hidden" name="token" value="{$_W['token']}" />
+						</td>
+					</tr>
+				</table>
+			</form>
+		</div>
+	{$pager}
+</div>
+	<script>
+
+$('#form2').submit(function(){
+if($(":checkbox[name='delete[]']:checked").size() > 0){
+return confirm('删除后不可恢复，您确定删除吗？');
+}
+return false;
+}); 
+require(['bootstrap'],function($){
+		$('[data-toggle="tooltip"]').hover(function(){
+			$(this).tooltip('show');
+		},function(){
+			$(this).tooltip('hide');
+		});
+	});	
+
+		</script>	
+		{elseif $op == 'post'}
+<div class="main">
+	<form action="" method="post" class="form-horizontal form">
+	<div class="panel panel-default">
+		
+		<div class="panel-body">
+   <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label f-red">奖品名称</label>
+        <div class="col-sm-9 col-xs-12">
+  		
+  			<input type="text" value="{$item['title']}" class="form-control" name="title" >
+			<div class="help-block">奖品名称</div>
+        </div>
+    </div>    
+	   <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label f-red">奖品等级</label>
+        <div class="col-sm-9 col-xs-12">
+  		
+  			<input type="text" value="{$item['dengji']}" class="form-control" name="dengji" >
+			<div class="help-block">奖品的等级</div>
+        </div>
+    </div>  
+    	<div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label f-red">奖品图片</label>
+        <div class="col-sm-9 col-xs-12">
+         	{php echo tpl_form_field_image('img',$item['img']);}
+			<span class="help-block">320X320 jpg最佳</span>
+        </div>
+    </div> 
+	   <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label f-red">SN码</label>
+        <div class="col-sm-9 col-xs-12">
+  		
+  			<input type="text" value="<?php echo empty($item['sn'])?$this->sn():$item['sn']; ?>" class="form-control" name="sn" >
+			<div class="help-block">中奖sn,自动生成,请勿修改</div>
+        </div>
+    </div> 
+    		   <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label f-red">openid</label>
+        <div class="col-sm-9 col-xs-12">
+  		
+  			<input type="text" value="{$item['openid']}" class="form-control" name="openid" >
+			<div class="help-block">中奖用户openid</div>
+        </div>
+    </div> 
+     <div class="form-group" >
+          <label class="col-xs-12 col-sm-3 col-md-2 control-label">状态</label>
+          <div class="col-sm-9 col-xs-12">
+             <label><input type="radio" value="0" name="isok" {if $item['isok'] == 0 }checked{/if}>未领取</label>
+             <label><input type="radio" value="1" name="isok" {if $item['isok'] == 1 }checked{/if}>已领取</label>
+             <div class="help-block">中奖状态</div>
+          </div>
+        </div>  
+			<div class="form-group">
+				<label class="col-sm-2 control-label"></label>
+				<div class="col-sm-4">
+				<input type="hidden" name="rid" value="{php echo empty($_GPC['rid'])?$item['rid']:$_GPC['rid']; }">
+				<input type="hidden" name="id" value="{$item['id']}">
+				<input type="hidden" name="token" value="{$_W['token']}" />
+					<input name="submit" type="submit" value="提交" class="btn btn-primary span3" />
+					
+				</div>
+			</div>
+			
+			</div>
+			</div>
+	</form>
+</div>
+		{/if}
+{template 'common/footer'}
