@@ -4,7 +4,7 @@
 
 将data/config.php内数据库信息设置为自己的数据库信息
 
-配置好后，后台账号admin  密码xiaoyinnet
+配置好后1，后台账号admin  密码xiaoyinnet
 
 qrh   qrhadmin
 
